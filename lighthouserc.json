@@ -1,0 +1,28 @@
+{
+  "ci": {
+    "collect": {
+      "staticDistDir": "./dist",
+      "url": [
+        "http://localhost/index.html",
+        "http://localhost/alacati-vinc-kiralama.html",
+        "http://localhost/hizmetler/mobil-vinc-kiralama.html"
+      ],
+      "numberOfRuns": 2,
+      "settings": { "preset": "perf", "formFactor": "mobile", "throttlingMethod": "simulate" }
+    },
+    "assert": {
+      "preset": "lighthouse:recommended",
+      "assertions": {
+        "categories:performance": ["error", { "minScore": 0.9 }],
+        "categories:seo": ["error", { "minScore": 1 }],
+        "categories:accessibility": ["error", { "minScore": 0.95 }],
+        "largest-contentful-paint": ["error", { "maxNumericValue": 2500 }],
+        "cumulative-layout-shift": ["error", { "maxNumericValue": 0.05 }],
+        "total-byte-weight": "off",
+        "unused-javascript": "off",
+        "uses-rel-preconnect": "off"
+      }
+    },
+    "upload": { "target": "temporary-public-storage" }
+  }
+}

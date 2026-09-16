@@ -1,0 +1,110 @@
+---
+import '@/styles/global.css';
+import company from '@/data/company.json';
+import Seo from '@/components/Seo.astro';
+import StickyCta from '@/components/StickyCta.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  ogImage?: string;
+}
+const { title, description, path, ogImage } = Astro.props;
+const year = new Date().getFullYear();
+const nav = [
+  { href: '/#hizmetler', label: 'Hizmetler' },
+  { href: '/#bolge', label: 'Bölge' },
+  { href: '/sss', label: 'SSS' },
+  { href: '/iletisim', label: 'İletişim' },
+];
+---
+<!doctype html>
+<html lang="tr" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b0f14" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="preload" href="/fonts/inter-tight-var.woff2" as="font" type="font/woff2" crossorigin />
+    <script is:inline>
+      // Hareket animasyonları için erken işaret: reduced-motion ise eklenmez, her şey statik görünür
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('js-motion');
+    </script>
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <Seo title={title} description={description} path={path} ogImage={ogImage} />
+    <slot name="head" />
+  </head>
+  <body class="min-h-svh">
+    <a href="#icerik" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded focus:bg-crane focus:px-4 focus:py-2 focus:font-bold focus:text-ink">İçeriğe geç</a>
+
+    <header class="absolute inset-x-0 top-0 z-40">
+      <div class="container-x flex h-16 items-center justify-between">
+        <a href="/" class="tap flex items-center gap-2.5 font-extrabold tracking-tight text-white" title="Ana sayfa">
+          <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
+            <rect width="32" height="32" rx="6" fill="#f5b301"/>
+            <path d="M7 24h18M9 24V13l12-6M21 7v17M21 7l4 3" stroke="#0b0f14" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <circle cx="12" cy="17" r="1.6" fill="#0b0f14"/>
+          </svg>
+          <span class="text-[17px] leading-none">Kurtuluş<span class="text-crane"> Vinç</span></span>
+        </a>
+        <nav aria-label="Ana menü" class="hidden gap-6 text-sm font-semibold text-fog md:flex">
+          {nav.map((n) => <a class="tap inline-flex items-center hover:text-white" href={n.href}>{n.label}</a>)}
+        </nav>
+        <a href={`tel:${company.phoneE164}`} class="tap inline-flex items-center rounded-full border border-crane/50 px-4 text-sm font-bold text-crane hover:bg-crane hover:text-ink">
+          {company.phoneDisplay}
+        </a>
+      </div>
+    </header>
+
+    <main id="icerik">
+      <slot />
+    </main>
+
+    <footer class="border-t border-line bg-ink-2">
+      <div class="hazard-stripe h-2 opacity-80" aria-hidden="true"></div>
+      <div class="container-x grid gap-8 py-12 md:grid-cols-3">
+        <div>
+          <p class="text-lg font-extrabold text-white">{company.name}</p>
+          <address class="mt-2 not-italic text-sm text-fog-2">
+            {company.areaLabel}<br />
+            <!-- TODO: sokak adresi doğrulanınca buraya ve company.json'a eklenecek -->
+            <a class="tap inline-flex items-center font-semibold text-fog hover:text-crane" href={`tel:${company.phoneE164}`}>{company.phoneDisplay}</a>
+          </address>
+        </div>
+        <nav aria-label="Hizmetler" class="text-sm">
+          <p class="mb-2 font-bold text-white">Hizmetler</p>
+          <ul class="space-y-1">
+            {company.services.map((s) => <li><a class="tap inline-flex items-center text-fog-2 hover:text-crane" href={`/hizmetler/${s.slug}`}>{s.name}</a></li>)}
+          </ul>
+        </nav>
+        <nav aria-label="Bölgeler" class="text-sm">
+          <p class="mb-2 font-bold text-white">Vinç Kiralama Bölgeleri</p>
+          <ul class="grid grid-cols-2 gap-x-4 gap-y-1">
+            {['cesme','alacati','ilica','urla','gulbahce','karaburun','seferihisar','guzelbahce'].map((slug) => {
+              const name = {cesme:'Çeşme',alacati:'Alaçatı',ilica:'Ilıca',urla:'Urla',gulbahce:'Gülbahçe',karaburun:'Karaburun',seferihisar:'Seferihisar',guzelbahce:'Güzelbahçe'}[slug];
+              return <li><a class="tap inline-flex items-center text-fog-2 hover:text-crane" href={`/${slug}-vinc-kiralama`}>{name}</a></li>;
+            })}
+          </ul>
+        </nav>
+      </div>
+      <div class="container-x flex flex-wrap items-center justify-between gap-2 border-t border-line py-4 text-xs text-fog-2">
+        <span>© {year} {company.name}. Tüm hakları saklıdır.</span>
+        <span class="flex gap-4"><a class="hover:text-crane" href="/sss">SSS</a><a class="hover:text-crane" href="/iletisim">İletişim</a></span>
+      </div>
+    </footer>
+
+    <StickyCta />
+    <script>
+      // Reveal animasyonları; js-motion sınıfı head'de erken eklenir
+      if (document.documentElement.classList.contains('js-motion')) {
+        const io = new IntersectionObserver((entries) => {
+          for (const e of entries) if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+        }, { rootMargin: '0px 0px -10% 0px' });
+        document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+      }
+    </script>
+  </body>
+</html>

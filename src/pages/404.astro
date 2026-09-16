@@ -1,0 +1,13 @@
+---
+import Base from '@/layouts/Base.astro';
+import company from '@/data/company.json';
+---
+<Base title="Sayfa bulunamadı | Kurtuluş Vinç" description="Aradığınız sayfa yok. Ana sayfaya dönün veya bizi arayın." path="/404">
+  <Fragment slot="head"><meta name="robots" content="noindex" /></Fragment>
+  <section class="container-x grid-lines pt-32 pb-20 text-center">
+    <p class="text-xs font-bold uppercase tracking-[0.2em] text-crane">404</p>
+    <h1 class="mt-2 text-4xl font-extrabold text-white">Bu yük burada değil</h1>
+    <p class="mt-4 text-fog">Sayfa taşınmış ya da hiç olmamış olabilir.</p>
+    <div class="mt-6 flex justify-center gap-3"><a href="/" class="tap inline-flex items-center rounded-full bg-crane px-6 font-extrabold text-ink">Ana sayfa</a><a href={`tel:${company.phoneE164}`} class="tap inline-flex items-center rounded-full border border-line px-6 font-bold text-fog">Ara</a></div>
+  </section>
+</Base>

@@ -1,0 +1,127 @@
+---
+/**
+ * JSON-LD üretici. `kind` ile sayfa tipine göre doğru şema seti basılır.
+ * NAP (isim-adres-telefon) company.json'dan gelir; footer ile birebir aynı format.
+ */
+import company from '@/data/company.json';
+import faq from '@/data/faq.json';
+
+type Kind = 'home' | 'service' | 'district' | 'faq' | 'contact';
+interface Props {
+  kind: Kind;
+  path: string;
+  service?: (typeof company.services)[number];
+  district?: { slug: string; name: string; description: string };
+}
+const { kind, path, service, district } = Astro.props;
+const site = company.siteUrl.replace(/\/$/, '');
+const url = site + path;
+const orgId = `${site}/#organization`;
+
+const address = {
+  '@type': 'PostalAddress',
+  // TODO: sokak adresi doğrulanınca streetAddress ve postalCode eklenecek
+  addressLocality: company.address.addressLocality,
+  addressRegion: company.address.addressRegion,
+  addressCountry: company.address.addressCountry,
+};
+
+const areaServed = company.areaServed.map((name) => ({ '@type': 'City', name }));
+
+const organization = {
+  '@type': ['HomeAndConstructionBusiness', 'Organization'],
+  '@id': orgId,
+  name: company.name,
+  url: site + '/',
+  telephone: company.phoneE164,
+  image: `${site}/og-default.png`,
+  logo: `${site}/logo.svg`,
+  address,
+  areaServed,
+  // TODO: openingHoursSpecification — çalışma saatleri doğrulanınca eklenecek
+  // TODO: sameAs — sosyal medya hesapları doğrulanınca eklenecek
+  priceRange: '₺₺',
+  contactPoint: {
+    '@type': 'ContactPoint',
+    telephone: company.phoneE164,
+    contactType: 'customer service',
+    availableLanguage: 'tr',
+  },
+};
+
+const website = {
+  '@type': 'WebSite',
+  '@id': `${site}/#website`,
+  url: site + '/',
+  name: company.siteTitle,
+  inLanguage: 'tr',
+  publisher: { '@id': orgId },
+};
+
+const provider = { '@id': orgId };
+const graph: Record<string, unknown>[] = [];
+
+if (kind === 'home') {
+  graph.push(organization, website);
+  graph.push({
+    '@type': 'OfferCatalog',
+    name: 'Vinç Hizmetleri',
+    itemListElement: company.services.map((s) => ({
+      '@type': 'Offer',
+      itemOffered: { '@type': 'Service', name: s.name, url: `${site}/hizmetler/${s.slug}` },
+    })),
+  });
+} else if (kind === 'service' && service) {
+  graph.push({
+    '@type': 'Service',
+    '@id': `${url}#service`,
+    name: service.name,
+    description: service.summary,
+    serviceType: service.name,
+    url,
+    provider,
+    areaServed,
+  });
+  graph.push(breadcrumb([{ name: 'Ana Sayfa', url: site + '/' }, { name: 'Hizmetler', url: site + '/#hizmetler' }, { name: service.name, url }]));
+} else if (kind === 'district' && district) {
+  graph.push({
+    '@type': 'Service',
+    '@id': `${url}#service`,
+    name: `${district.name} Vinç Kiralama`,
+    description: district.description,
+    serviceType: 'Vinç Kiralama',
+    url,
+    provider,
+    areaServed: { '@type': 'City', name: district.name },
+  });
+  graph.push(breadcrumb([{ name: 'Ana Sayfa', url: site + '/' }, { name: `${district.name} Vinç Kiralama`, url }]));
+} else if (kind === 'faq') {
+  graph.push({
+    '@type': 'FAQPage',
+    '@id': `${url}#faq`,
+    mainEntity: faq.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  });
+} else if (kind === 'contact') {
+  graph.push({ '@type': 'ContactPage', '@id': `${url}#contact`, url, mainEntity: { '@id': orgId } });
+  graph.push(organization);
+}
+
+function breadcrumb(items: { name: string; url: string }[]) {
+  return {
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((it, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: it.name,
+      item: it.url,
+    })),
+  };
+}
+
+const json = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
+---
+<script type="application/ld+json" set:html={json} />

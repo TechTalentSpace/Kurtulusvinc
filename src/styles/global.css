@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Inter Tight";
+  src: url("/fonts/inter-tight-var.woff2") format("woff2");
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: "Inter Tight", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --color-ink: #0b0f14;
+  --color-ink-2: #11161d;
+  --color-ink-3: #182028;
+  --color-line: #232c36;
+  --color-fog: #c9d1da;
+  --color-fog-2: #8b96a3;
+  --color-crane: #f5b301;
+  --color-crane-2: #ffd34d;
+  --color-alert: #f2542d;
+  --color-safe: #1fbf75;
+  --spacing-cta: 56px;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+  body {
+    @apply bg-ink text-fog font-sans antialiased;
+    padding-bottom: calc(var(--spacing-cta) + env(safe-area-inset-bottom, 0px));
+    font-feature-settings: "ss01", "cv11";
+  }
+  ::selection { background: var(--color-crane); color: var(--color-ink); }
+  :focus-visible { outline: 2px solid var(--color-crane); outline-offset: 3px; }
+  h1, h2, h3 { text-wrap: balance; letter-spacing: -0.02em; }
+  p { text-wrap: pretty; }
+}
+
+@utility hazard-stripe {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--color-crane) 0 12px,
+    var(--color-ink) 12px 24px
+  );
+}
+
+@utility grid-lines {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--color-line) 60%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-line) 60%, transparent) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+@utility container-x {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  max-width: 72rem;
+  @media (width >= 640px) { padding-inline: 1.5rem; }
+  @media (width >= 1024px) { padding-inline: 2rem; }
+}
+
+@utility tap {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+@keyframes scroll-hint {
+  0%, 100% { transform: translateY(0); opacity: .35; }
+  50% { transform: translateY(8px); opacity: 1; }
+}
+.scroll-hint { animation: scroll-hint 1.6s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .scroll-hint { animation: none; } }
+
+/* Reveal-on-scroll: gizli başlar, JS yoksa ya da reduced motion'da görünür kalır */
+.js-motion [data-reveal] { opacity: 0; transform: translateY(18px); will-change: transform, opacity; }
+.js-motion [data-reveal].is-in { opacity: 1; transform: none; transition: opacity .6s ease, transform .6s ease; }
+
+/* Hero: JS + hareket varsa etiketler ve CTA gizli başlar; GSAP açar */
+.js-motion #hero .hero-label,
+.js-motion #hero [data-hero-cta] { opacity: 0; }

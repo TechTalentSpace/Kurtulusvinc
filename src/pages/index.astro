@@ -1,0 +1,148 @@
+---
+import Base from '@/layouts/Base.astro';
+import JsonLd from '@/components/JsonLd.astro';
+import CraneHero from '@/components/CraneHero.astro';
+import RegionMap from '@/components/RegionMap.astro';
+import company from '@/data/company.json';
+import districts from '@/data/districts.json';
+import faq from '@/data/faq.json';
+
+const title = 'Çeşme Alaçatı Vinç Kiralama | Kurtuluş Vinç — 0532 466 38 74';
+const description = 'Çeşme, Alaçatı, Urla ve yarımadada operatörlü mobil vinç, sepetli platform ve hiyap nakliye. Tekne indirme, çatı, prefabrik. Hemen arayın.';
+const why = [
+  { t: 'Yarımadanın içinden', d: 'Çeşme merkezliyiz; Alaçatı, Ilıca ve Urla\'ya kısa sürede ulaşıyoruz.', icon: 'M3 12h18M12 3l9 9-9 9' },
+  { t: 'Operatörlü kiralama', d: 'Her vinç deneyimli operatörle gelir; yükü birlikte planlarız.', icon: 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z' },
+  { t: 'Deniz ve kara işleri', d: 'Tekne indirme-bindirme, çatı, prefabrik ve konteyner aynı ekipte.', icon: 'M2 20c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M4 16l2-8h12l2 8M12 4v4' },
+  { t: 'TODO: doğrulanacak', d: 'TODO: 7/24 hizmet, sigorta ve belge bilgileri firma tarafından teyit edilince yazılacak.', icon: 'M12 9v4M12 17h.01M12 3l9 16H3z' },
+];
+---
+<Base title={title} description={description} path="/">
+  <Fragment slot="head"><JsonLd kind="home" path="/" /></Fragment>
+
+  <CraneHero />
+
+  <!-- HİZMETLER -->
+  <section id="hizmetler" class="container-x scroll-mt-20 py-16 md:py-24">
+    <div class="mb-8 flex items-end justify-between gap-4" data-reveal>
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-crane">Hizmetler</p>
+        <h2 class="mt-2 text-3xl font-extrabold text-white md:text-4xl">Dört kademe, dört hizmet</h2>
+      </div>
+    </div>
+    <ul class="grid gap-4 sm:grid-cols-2">
+      {company.services.map((s, i) => (
+        <li data-reveal>
+          <a href={`/hizmetler/${s.slug}`} class="group relative flex h-full flex-col rounded-2xl border border-line bg-ink-2 p-6 transition-colors hover:border-crane/60">
+            <span class="hazard-stripe absolute inset-x-6 top-0 h-1 rounded-b opacity-0 transition-opacity group-hover:opacity-100" aria-hidden="true"></span>
+            <span class="mb-4 inline-flex h-9 w-9 items-center justify-center rounded-full bg-crane text-sm font-extrabold text-ink">{i + 1}</span>
+            <h3 class="text-xl font-bold text-white">{s.name}</h3>
+            <p class="mt-2 text-sm text-fog-2">{s.tagline}</p>
+            <span class="mt-auto pt-6 text-sm font-bold text-crane">Detay →</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- BÖLGE -->
+  <section id="bolge" class="scroll-mt-20 border-y border-line bg-ink-2 py-16 md:py-24">
+    <div class="container-x grid gap-10 md:grid-cols-12 md:items-center">
+      <div class="md:col-span-5" data-reveal>
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-crane">Çalışma bölgesi</p>
+        <h2 class="mt-2 text-3xl font-extrabold text-white md:text-4xl">Yarımadanın her noktasına</h2>
+        <p class="mt-4 text-fog">Çeşme merkezden çıkıp Karaburun'un ucuna, Seferihisar'ın sahiline kadar gidiyoruz. İlçenizi seçin, o bölgeye özgü işleri görün.</p>
+        <ul class="mt-6 flex flex-wrap gap-2">
+          {districts.map((d) => (
+            <li><a href={`/${d.slug}-vinc-kiralama`} class="tap inline-flex items-center rounded-full border border-line px-4 text-sm font-semibold text-fog hover:border-crane hover:text-crane">{d.name}</a></li>
+          ))}
+        </ul>
+        <p class="mt-4 text-sm text-fog-2">Ayrıca: Dalyan, Mordoğan ve İzmir merkez.</p>
+      </div>
+      <div class="md:col-span-7" data-reveal>
+        <RegionMap />
+      </div>
+    </div>
+  </section>
+
+  <!-- NEDEN BİZ -->
+  <section class="container-x py-16 md:py-24">
+    <div data-reveal>
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-crane">Neden biz</p>
+      <h2 class="mt-2 text-3xl font-extrabold text-white md:text-4xl">Somut, şişirmesiz</h2>
+    </div>
+    <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {why.map((w) => (
+        <li class="rounded-2xl border border-line p-6" data-reveal>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f5b301" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={w.icon} /></svg>
+          <h3 class="mt-4 font-bold text-white">{w.t}</h3>
+          <p class="mt-1 text-sm text-fog-2">{w.d}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- İŞ FOTOĞRAFLARI -->
+  <section class="border-y border-line bg-ink-2 py-16 md:py-24">
+    <div class="container-x">
+      <div data-reveal>
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-crane">Sahadan</p>
+        <h2 class="mt-2 text-3xl font-extrabold text-white md:text-4xl">İş fotoğrafları</h2>
+        <p class="mt-2 text-sm text-fog-2">TODO: gerçek fotoğraflar eklenecek (astro:assets ile WebP/AVIF, lazy).</p>
+      </div>
+      <ul class="mt-8 grid grid-cols-2 gap-3 md:grid-cols-4" aria-label="Fotoğraf yer tutucuları">
+        {['Tekne indirme', 'Çatı montajı', 'Prefabrik yerleştirme', 'Sepetli cephe işi', 'Konteyner nakliye', 'Klima montajı', 'Ağaç budama', 'Marina operasyonu'].map((c) => (
+          <li class="grid-lines relative aspect-[4/3] overflow-hidden rounded-xl border border-line bg-ink" data-reveal>
+            <span class="hazard-stripe absolute inset-x-0 top-0 h-1.5 opacity-70" aria-hidden="true"></span>
+            <span class="absolute inset-x-3 bottom-3 text-xs font-semibold text-fog-2">{c}<br /><span class="text-[10px] text-fog-2/70">TODO: fotoğraf</span></span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- SSS -->
+  <section class="container-x py-16 md:py-24">
+    <div data-reveal>
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-crane">Sık sorulanlar</p>
+      <h2 class="mt-2 text-3xl font-extrabold text-white md:text-4xl">Aklınızdakiler</h2>
+    </div>
+    <div class="mt-8 divide-y divide-line border-y border-line">
+      {faq.map((f) => (
+        <details class="group py-4" data-reveal>
+          <summary class="tap flex cursor-pointer list-none items-center justify-between gap-4 font-bold text-white [&::-webkit-details-marker]:hidden">
+            {f.q}
+            <span class="text-crane transition-transform group-open:rotate-45" aria-hidden="true">+</span>
+          </summary>
+          <p class="mt-3 text-fog">{f.a}</p>
+        </details>
+      ))}
+    </div>
+    <a href="/sss" class="tap mt-6 inline-flex items-center font-bold text-crane">Tüm sorular →</a>
+  </section>
+
+  <!-- İLETİŞİM -->
+  <section id="iletisim" class="border-t border-line bg-ink-2 py-16 md:py-24">
+    <div class="container-x grid gap-10 md:grid-cols-2">
+      <div data-reveal>
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-crane">İletişim</p>
+        <h2 class="mt-2 text-3xl font-extrabold text-white md:text-4xl">Konumu söyleyin, yola çıkalım</h2>
+        <p class="mt-4 text-fog">En hızlı yol telefon. WhatsApp'tan konum ve fotoğraf gönderirseniz keşif kolaylaşır.</p>
+        <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+          <a href={`tel:${company.phoneE164}`} class="tap inline-flex items-center justify-center rounded-full bg-crane px-6 py-3 text-lg font-extrabold text-ink">{company.phoneDisplay}</a>
+          <a href={company.whatsapp} target="_blank" rel="noopener" class="tap inline-flex items-center justify-center rounded-full border border-safe px-6 py-3 font-bold text-safe">WhatsApp'tan yaz</a>
+        </div>
+        <address class="mt-6 not-italic text-sm text-fog-2">{company.name} · {company.areaLabel}</address>
+      </div>
+      <form name="iletisim" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/iletisim?gonderildi=1" class="grid gap-3 rounded-2xl border border-line bg-ink p-6" data-reveal>
+        <input type="hidden" name="form-name" value="iletisim" />
+        <p class="hidden"><label>Bu alanı boş bırakın: <input name="bot-field" /></label></p>
+        <label class="grid gap-1 text-sm font-semibold text-fog">Adınız<input required name="ad" autocomplete="name" class="tap rounded-lg border border-line bg-ink-2 px-3 text-white" /></label>
+        <label class="grid gap-1 text-sm font-semibold text-fog">Telefon<input required type="tel" name="telefon" autocomplete="tel" inputmode="tel" class="tap rounded-lg border border-line bg-ink-2 px-3 text-white" /></label>
+        <label class="grid gap-1 text-sm font-semibold text-fog">Konum / ilçe<input name="konum" class="tap rounded-lg border border-line bg-ink-2 px-3 text-white" placeholder="Örn. Alaçatı, Hacımemiş" /></label>
+        <label class="grid gap-1 text-sm font-semibold text-fog">İş kısaca<textarea name="mesaj" rows="3" class="rounded-lg border border-line bg-ink-2 px-3 py-2 text-white" placeholder="Örn. 8 m tekne karaya alma"></textarea></label>
+        <button type="submit" class="tap mt-1 rounded-full bg-white px-6 py-3 font-extrabold text-ink hover:bg-crane">Gönder</button>
+        <p class="text-xs text-fog-2">Form Netlify Forms ile çalışır. <!-- TODO: Vercel'e deploy edilirse Formspree endpoint'i ile değiştir --></p>
+      </form>
+    </div>
+  </section>
+</Base>

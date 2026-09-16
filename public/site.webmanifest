@@ -1,0 +1,10 @@
+{
+  "name": "Kurtuluş Vinç Çeşme Alaçatı",
+  "short_name": "Kurtuluş Vinç",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#0b0f14",
+  "theme_color": "#0b0f14",
+  "lang": "tr",
+  "icons": [{ "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }]
+}

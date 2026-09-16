@@ -1,0 +1,28 @@
+---
+import Base from '@/layouts/Base.astro';
+import JsonLd from '@/components/JsonLd.astro';
+import company from '@/data/company.json';
+import faq from '@/data/faq.json';
+const title = 'Sık Sorulan Sorular | Kurtuluş Vinç Çeşme Alaçatı';
+const description = 'Vinç kiralama fiyatı, geliş süresi, tekne indirme, dar sokak erişimi ve hizmet bölgeleri hakkında sık sorulan sorular. Kurtuluş Vinç, Çeşme.';
+---
+<Base title={title} description={description} path="/sss">
+  <Fragment slot="head"><JsonLd kind="faq" path="/sss" /></Fragment>
+  <section class="grid-lines border-b border-line pt-28 pb-12 md:pt-36">
+    <div class="container-x">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-crane">SSS</p>
+      <h1 class="mt-2 text-4xl font-extrabold text-white md:text-5xl">Sık Sorulan Sorular</h1>
+      <p class="mt-4 max-w-2xl text-lg text-fog">Cevabını bulamadınız mı? <a class="font-bold text-crane" href={`tel:${company.phoneE164}`}>{company.phoneDisplay}</a></p>
+    </div>
+  </section>
+  <section class="container-x py-12">
+    <div class="divide-y divide-line border-y border-line">
+      {faq.map((f) => (
+        <details class="group py-4" open>
+          <summary class="tap flex cursor-pointer list-none items-center justify-between gap-4 text-lg font-bold text-white [&::-webkit-details-marker]:hidden">{f.q}<span class="text-crane transition-transform group-open:rotate-45" aria-hidden="true">+</span></summary>
+          <p class="mt-3 text-fog">{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+</Base>
