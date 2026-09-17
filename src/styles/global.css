@@ -81,7 +81,10 @@
 .js-motion [data-reveal] { opacity: 0; transform: translateY(18px); will-change: transform, opacity; }
 .js-motion [data-reveal].is-in { opacity: 1; transform: none; transition: opacity .6s ease, transform .6s ease; }
 
-/* Hero: fotoğraf katmanı GSAP ile scale/translate; JS yoksa statik */
-#hero [data-hero-photo] { will-change: transform; transform-origin: 60% 70%; }
-#hero [data-hero-photo] img { width: 100%; height: 100%; object-fit: cover; object-position: 62% 55%; }
-@media (width >= 768px) { #hero [data-hero-photo] img { object-position: 55% 50%; } }
+/* Hero: JS + hareket varsa bom kapalı başlar (GSAP aynı değerlerle devralır); JS yoksa açık statik */
+#hero [data-layer], #hero [data-cable-wrap], #hero [data-cable] { will-change: transform; }
+.js-motion #hero [data-layer="boom2"] { transform: translate(11.4%, 21.8%); }
+.js-motion #hero [data-layer="boom3"],
+.js-motion #hero [data-layer="hook"],
+.js-motion #hero [data-cable-wrap] { transform: translate(22.1%, 42.2%); }
+.js-motion #hero [data-hero-cta] { opacity: 0; }

@@ -14,6 +14,6 @@ export default defineConfig({
   },
   build: {
     format: 'file',
-    inlineStylesheets: 'auto',
+    inlineStylesheets: 'always',
   },
 });

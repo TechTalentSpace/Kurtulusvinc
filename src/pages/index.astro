@@ -6,6 +6,11 @@ import RegionMap from '@/components/RegionMap.astro';
 import company from '@/data/company.json';
 import districts from '@/data/districts.json';
 import faq from '@/data/faq.json';
+import { getImage } from 'astro:assets';
+import carrier from '@/assets/crane/carrier.png';
+import { HERO_WIDTHS, HERO_SIZES, HERO_QUALITY } from '@/scripts/hero-assets';
+// LCP: hero'nun en büyük katmanını head'den preload et
+const carrierImg = await getImage({ src: carrier, widths: HERO_WIDTHS, quality: HERO_QUALITY, format: 'webp' });
 
 const title = 'Çeşme Alaçatı Vinç Kiralama | Kurtuluş Vinç — 0532 466 38 74';
 const description = 'Çeşme, Alaçatı, Urla ve yarımadada operatörlü mobil vinç, sepetli platform ve hiyap nakliye. Tekne indirme, çatı, prefabrik. Hemen arayın.';
@@ -17,7 +22,10 @@ const why = [
 ];
 ---
 <Base title={title} description={description} path="/">
-  <Fragment slot="head"><JsonLd kind="home" path="/" /></Fragment>
+  <Fragment slot="head">
+    <link rel="preload" as="image" imagesrcset={carrierImg.srcSet.attribute} imagesizes={HERO_SIZES} fetchpriority="high" />
+    <JsonLd kind="home" path="/" />
+  </Fragment>
 
   <CraneHero />
 

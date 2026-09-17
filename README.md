@@ -67,10 +67,10 @@ Grafit zemin (`#0C0E11`), sıcak fildişi metin (`#E8E4DC`), tek vurgu pirinç (
 
 | Sayfa | Perf | SEO | A11y | LCP | CLS |
 |---|---|---|---|---|---|
-| `/` | 100 | 100 | 100 | 1.7 s | 0 |
+| `/` | 98 | 100 | 100 | 2.3 s | 0 |
 | `/alacati-vinc-kiralama` | 100 | 100 | 100 | 1.2 s | 0 |
 
-JS: tek bundle 116 KB / **46 KB gzip** (GSAP core + ScrollTrigger + hero). Font 26 KB. Hero fotoğrafı AVIF/WebP, mobilde ~40–60 KB.
+JS: tek bundle 116 KB / **46 KB gzip** (GSAP core + ScrollTrigger + hero). Font 26 KB. Hero katmanları WebP, mobilde toplam ~115 KB (carrier 69 KB LCP). CSS inline.
 
 ## TODO — firma tarafından doğrulanacaklar
 
