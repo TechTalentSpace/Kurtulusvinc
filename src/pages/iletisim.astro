@@ -9,30 +9,32 @@ const description = 'Kurtuluş Vinç ile iletişim: telefon 0532 466 38 74, What
   <Fragment slot="head"><JsonLd kind="contact" path="/iletisim" /></Fragment>
   <section class="grid-lines border-b border-line pt-28 pb-12 md:pt-36">
     <div class="container-x">
-      <p class="text-xs font-bold uppercase tracking-[0.2em] text-crane">İletişim</p>
-      <h1 class="mt-2 text-4xl font-semibold tracking-tight text-white md:text-5xl">Konumu söyleyin, yola çıkalım</h1>
-      <p class="mt-4 max-w-2xl text-lg text-fog">En hızlı yol telefon. WhatsApp'tan konum ve fotoğraf gönderirseniz keşif kolaylaşır.</p>
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-crane-deep">İletişim</p>
+      <h1 class="mt-2 text-4xl font-semibold tracking-tight text-ink md:text-5xl">Konumu söyleyin, yola çıkalım</h1>
+      <p class="mt-4 max-w-2xl text-lg text-ink-2">En hızlı yol telefon. WhatsApp'tan konum ve fotoğraf gönderirseniz keşif kolaylaşır.</p>
     </div>
   </section>
   <section class="container-x grid gap-10 py-12 md:grid-cols-2">
     <div>
-      <div id="tesekkur" class="mb-6 hidden rounded-xl border border-safe/50 bg-safe/10 p-4 text-sm text-white">Mesajınız alındı, en kısa sürede dönüş yapacağız.</div>
+      <div id="tesekkur" class="mb-6 hidden rounded-xl border border-safe-deep/40 bg-safe/15 p-4 text-sm text-ink">Mesajınız alındı, en kısa sürede dönüş yapacağız.</div>
       <dl class="space-y-5">
-        <div><dt class="text-xs font-bold uppercase tracking-[0.2em] text-fog-2">Telefon</dt><dd><a href={`tel:${company.phoneE164}`} class="tap inline-flex items-center text-2xl font-extrabold text-crane">{company.phoneDisplay}</a></dd></div>
-        <div><dt class="text-xs font-bold uppercase tracking-[0.2em] text-fog-2">WhatsApp</dt><dd><a href={company.whatsapp} target="_blank" rel="noopener" class="tap inline-flex items-center font-bold text-safe">wa.me/905324663874</a></dd></div>
-        <div><dt class="text-xs font-bold uppercase tracking-[0.2em] text-fog-2">Adres</dt><dd class="text-fog">{company.areaLabel}<!-- TODO: sokak adresi doğrulanınca ekle --></dd></div>
-        <div><dt class="text-xs font-bold uppercase tracking-[0.2em] text-fog-2">Çalışma saatleri</dt><dd class="text-fog-2">{company.openingHours.text}</dd></div>
+        <div><dt class="text-xs font-bold uppercase tracking-[0.2em] text-ink-3">Telefon</dt><dd><a href={`tel:${company.phoneE164}`} class="tap inline-flex items-center text-2xl font-extrabold text-crane-deep">{company.phoneDisplay}</a></dd></div>
+        <div><dt class="text-xs font-bold uppercase tracking-[0.2em] text-ink-3">WhatsApp</dt><dd><a href={company.whatsapp} target="_blank" rel="noopener" class="tap inline-flex items-center font-bold text-safe-deep">wa.me/905324663874</a></dd></div>
+        {company.social.facebook && <div><dt class="text-xs font-bold uppercase tracking-[0.2em] text-ink-3">Facebook</dt><dd><a href={company.social.facebook} target="_blank" rel="noopener" class="tap inline-flex items-center font-semibold text-ink hover:text-crane-deep">Kurtuluş Vinç Çeşme / Alaçatı</a></dd></div>}
+        {company.social.instagram && <div><dt class="text-xs font-bold uppercase tracking-[0.2em] text-ink-3">Instagram</dt><dd><a href={company.social.instagram} target="_blank" rel="noopener" class="tap inline-flex items-center font-semibold text-ink hover:text-crane-deep">Instagram</a></dd></div>}
+        <div><dt class="text-xs font-bold uppercase tracking-[0.2em] text-ink-3">Adres</dt><dd class="text-ink-2">{company.areaLabel}<!-- TODO: sokak adresi doğrulanınca ekle --></dd></div>
+        <div><dt class="text-xs font-bold uppercase tracking-[0.2em] text-ink-3">Çalışma saatleri</dt><dd class="text-ink-3">{company.openingHours.text}</dd></div>
       </dl>
     </div>
-    <form name="iletisim" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/iletisim?gonderildi=1" class="grid gap-3 rounded-2xl border border-line bg-ink-2 p-6">
+    <form name="iletisim" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/iletisim?gonderildi=1" class="grid gap-3 rounded-2xl border border-line bg-white p-6">
       <input type="hidden" name="form-name" value="iletisim" />
       <p class="hidden"><label>Bu alanı boş bırakın: <input name="bot-field" /></label></p>
-      <label class="grid gap-1 text-sm font-semibold text-fog">Adınız<input required name="ad" autocomplete="name" class="tap rounded-lg border border-line bg-ink px-3 text-white" /></label>
-      <label class="grid gap-1 text-sm font-semibold text-fog">Telefon<input required type="tel" name="telefon" autocomplete="tel" inputmode="tel" class="tap rounded-lg border border-line bg-ink px-3 text-white" /></label>
-      <label class="grid gap-1 text-sm font-semibold text-fog">Konum / ilçe<input name="konum" class="tap rounded-lg border border-line bg-ink px-3 text-white" placeholder="Örn. Urla, Bademler" /></label>
-      <label class="grid gap-1 text-sm font-semibold text-fog">İş kısaca<textarea name="mesaj" rows="4" class="rounded-lg border border-line bg-ink px-3 py-2 text-white" placeholder="Örn. prefabrik bağ evi yerleştirme"></textarea></label>
+      <label class="grid gap-1 text-sm font-semibold text-ink-2">Adınız<input required name="ad" autocomplete="name" class="tap rounded-lg border border-line bg-paper px-3 text-ink" /></label>
+      <label class="grid gap-1 text-sm font-semibold text-ink-2">Telefon<input required type="tel" name="telefon" autocomplete="tel" inputmode="tel" class="tap rounded-lg border border-line bg-paper px-3 text-ink" /></label>
+      <label class="grid gap-1 text-sm font-semibold text-ink-2">Konum / ilçe<input name="konum" class="tap rounded-lg border border-line bg-paper px-3 text-ink" placeholder="Örn. Urla, Bademler" /></label>
+      <label class="grid gap-1 text-sm font-semibold text-ink-2">İş kısaca<textarea name="mesaj" rows="4" class="rounded-lg border border-line bg-paper px-3 py-2 text-ink" placeholder="Örn. prefabrik bağ evi yerleştirme"></textarea></label>
       <button type="submit" class="tap mt-1 rounded-full bg-crane px-6 py-3 font-extrabold text-ink">Gönder</button>
-      <p class="text-xs text-fog-2">Form Netlify Forms ile çalışır. <!-- TODO: Vercel'e deploy edilirse Formspree endpoint'i ile değiştir --></p>
+      <p class="text-xs text-ink-3">Form Netlify Forms ile çalışır. <!-- TODO: Vercel'e deploy edilirse Formspree endpoint'i ile değiştir --></p>
     </form>
   </section>
   <script>

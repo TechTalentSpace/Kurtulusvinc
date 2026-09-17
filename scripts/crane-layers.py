@@ -18,7 +18,7 @@ H, W = a.shape[:2]
 
 def erase(x0, y0, x1, y1): a[y0:y1, x0:x1, 3] = 0
 # arka plan kalıntıları: tel, direk, branda, forklift
-erase(800, 1240, 1330, 1470); erase(1180, 1240, 1330, 1840)
+erase(800, 1240, 1330, 1470); erase(1100, 1100, 1330, 1850); erase(1260, 800, 1330, 1100)
 erase(370, 1740, 636, 2012); erase(370, 2012, 426, 2062); erase(465, 1880, 585, 2015)
 # mavi branda kalıntıları (renk maskesi, sadece alt bölgede)
 rgb = a[..., :3]; mx = rgb.max(-1); mn = rgb.min(-1); d = mx - mn + 1e-6
@@ -28,6 +28,10 @@ s = np.where(mx > 0, d / (mx + 1e-6), 0); v = mx
 blue = (h > 185) & (h < 260) & (s > 0.3)
 region = np.zeros((H, W), bool); region[1700:2100, 360:930] = True
 a[..., 3] = np.where(blue & region, 0, a[..., 3])
+# motor/bom ayağı arkasında kalan gri duvar: düşük doygunluk, orta parlaklık (vinç parçaları ya siyah ya turuncu)
+gray = (s < 0.22) & (v > 0.3) & (v < 0.92)
+region2 = np.zeros((H, W), bool); region2[1580:1860, 900:1130] = True
+a[..., 3] = np.where(gray & region2, 0, a[..., 3])
 
 # turuncu -> altın (pirinç paletiyle uyum)
 mask = (h > 5) & (h < 45) & (s > 0.35) & (a[..., 3] > 0)

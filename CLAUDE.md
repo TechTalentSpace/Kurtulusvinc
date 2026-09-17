@@ -29,11 +29,13 @@ Kullanma: React, Three.js/R3F, Lottie, Framer Motion, jQuery, herhangi bir UI ki
 
 ## Tasarım dili
 
-- **Elit, sakin palet** (sarı-siyah şantiye görünümü istenmiyor): grafit zemin `#0C0E11` / `#13161B`, sıcak fildişi metin `#E8E4DC`, ikincil gri `#9AA0A8`, tek vurgu **pirinç** `#C9A961` (hover `#E0C27C`), kısık uyarı `#C7573A`. Şantiye şeridi yok; onun yerine ince pirinç hairline. Başlıklar `font-semibold`, sıkı tracking; ağır extrabold kullanma.
-- Vinç görseli **gerçek fotoğraf** olmalı, çizim/ikon değil. Şu an `src/assets/hero-crane.jpg` (Flickr, Rab., CC BY 2.0; kırpılıp renk düzenlendi, footer'da atıf var). Firmanın kendi vinç fotoğrafı gelince aynı dosya adıyla değiştir, `scripts/hero-photo.mjs` ile aynı grade'i uygula, atıf satırını kaldır.
-- Mobil-first: önce 390px, sonra 768, 1280. **Masaüstü ikincil**; kullanıcı çoğunlukla yolda, telefondan, acil durumda giriyor. Mobil görünüm elit ve hızlı olmalı; masaüstü onun düzgün genişletilmiş hali.
-- Her ekranda alt sabit CTA çubuğu: **[Ara] [WhatsApp]** — 56px yükseklik, `env(safe-area-inset-bottom)` dikkate al.
-- Dokunma hedefleri ≥ 44px. Metin kontrastı WCAG AA.
+- **Açık, yumuşak, sarıyla uyumlu palet** (siyah ve koyu zemin YOK; grafit sürüm kullanıcı kararıyla kaldırıldı): fildişi zemin `#FBF8F1`, kum bantlar `#F4EEE1` / `#EBE3D0`, çizgi `#E3DBC8`, kartlar beyaz. Metin sıcak kömür `#2C2820` (siyah değil), ikincil `#5B5446`, üçüncül `#7D7464`. Vurgu **bal sarısı** `#E3A92F` (hover `#F0BE50`) yalnızca buton/çizgi/nokta olarak; açık zeminde **vurgu metni** için koyu bal `#8F620C` (kontrast ≥ 4.5). Uyarı `#D26A3E`, WhatsApp yeşili `#25D366`.
+- Vinç görseli **gerçek fotoğraf**, çizim değil; **arka plansız** tek vinç. Şu an Pexels #29502190 (ACE 16XW, Pexels lisansı, atıf gerekmez); `scripts/crane-layers.py` ile arka planı kaldırılıp turuncu→altın kaydırıldı ve bom eklemlerinden katmanlara ayrıldı. Firmanın kendi vinç fotoğrafı gelince aynı script ile yeniden üretilir.
+- İş fotoğrafları: `src/assets/isler/` klasörüne atılan her görsel ana sayfadaki galeride otomatik listelenir (dosya adı alt metin olur). Klasör boşken yer tutucu grid görünür.
+- Mobil-first: önce 390px, sonra 768, 1280. **Masaüstü ikincil**; kullanıcı çoğunlukla yolda, telefondan, acil durumda giriyor.
+- Her ekranda alt sabit CTA çubuğu: **[Ara] [WhatsApp]** — 56px, `env(safe-area-inset-bottom)`; Ara bal sarısı, WhatsApp yeşil, ikisinde de koyu metin.
+- Dokunma hedefleri ≥ 44px. Metin kontrastı WCAG AA; açık zeminde `text-crane` (bal sarısı) metin olarak KULLANMA, `text-crane-deep` kullan.
+- Sosyal bağlantılar `company.json > social`'dan gelir; boş alan gösterilmez. Footer, iletişim ve JSON-LD `sameAs` aynı kaynağı okur.
 
 ## Sayfa yapısı
 
@@ -59,21 +61,21 @@ Kullanma: React, Three.js/R3F, Lottie, Framer Motion, jQuery, herhangi bir UI ki
 
 ## Hero animasyonu spesifikasyonu
 
-Konsept: Tam ekran **gerçek vinç fotoğrafı** (pinned). Scroll ettikçe vinç kameraya yaklaşır ve sola doğru geçer (kamera itişi), ton koyulaşır, başlık yukarı süzülür. Sonda hero sönerek hizmetlere bırakır. Mesaj acil-odaklı: "Vinç lazım. Biz yoldayız." + telefon CTA + "Konum gönder" (WhatsApp).
+Konsept: Fildişi zemin üzerinde arka plansız **gerçek vinç**. Sayfa açıldığında bom kapalı; scroll ettikçe teleskopik bölümler gerçek eklem yerlerinden bom ekseninde uzar (2 kademe: 2. bölüm, sonra 3. bölüm + baş). Bom tam açıldığında kanca aşağı iner ve "Hemen Ara" CTA'sını kaldırır (`y: 40 → 0`). Başlık üstte durur, bom yaklaşmadan yukarı süzülüp söner.
 
 Uygulama:
-- `src/components/CraneHero.astro`: `astro:assets` `<Picture>` (AVIF/WebP, 480/768/1024, `loading="eager"`, `fetchpriority="high"`), üstte iki gradient katmanı + `[data-hero-shade]` (scroll'da koyulaşır).
-- `src/scripts/hero.ts`: GSAP `ScrollTrigger` pin (`start: 'top top'`, mobil `+=120%`, masaüstü `+=140%`, `scrub: 0.6`). Fotoğraf `scale 1.06 → 1.28`, `xPercent → -9` (mobil) / `-6` (masaüstü), metin `yPercent -18`, son %35'te metin `opacity .15`. Yükte kısa giriş: fotoğraf `scale 1.14 → 1`, metin satırları `y/opacity` stagger.
-- Sadece `transform` ve `opacity`. `will-change: transform` fotoğraf katmanında.
-- **Reduced motion**: ScrollTrigger ve giriş animasyonu kurulmaz; her şey statik.
-- **LCP**: hero fotoğrafı LCP öğesidir; inline `<picture>` ile ilk HTML'de, preload gerekmez. GSAP `requestIdleCallback` ile yüklenir.
-- Pinned bölüm `100svh`. Scroll ipucu ilk scroll'da kaybolur.
-- Eski SVG bom animasyonu kaldırıldı (kullanıcı kararı: çizim değil gerçek vinç).
+- Varlıklar: `src/assets/crane/{carrier,boom2,boom3,hook}.png` — aynı 1100×2080 tuval, şeffaf; `astro:assets` `<Image>` ile WebP (480/720/1000, kalite 72; ayarlar `src/scripts/hero-assets.ts`). `scripts/crane-layers.py` üretir (rembg + eksen boyunca dik kesim + renk).
+- `src/components/CraneHero.astro`: dört katman `absolute inset-0 object-contain` üst üste (kanca en altta, carrier en üstte). Kablo: `[data-cable-wrap]` (kanca ile taşınır) içinde `[data-cable]` (scaleY). CTA tuvalin içinde, kancanın altında.
+- `src/scripts/hero.ts`: GSAP ScrollTrigger pin (`start: 'top top'`, mobil `+=220%`, masaüstü `+=260%`, `scrub: 0.6`). Geri çekilme değerleri tuval yüzdesi (`R2`, `R3`, pozitif = tabana doğru). Zaman çizelgesi: 0–0.4 boom2, 0.38–0.76 boom3, 0.12–0.37 metin çekilir, 0.78–1.0 kanca iner + CTA.
+- Kapalı başlangıç `global.css`'te `.js-motion` altında CSS transform ile (flaş yok); GSAP aynı değerleri `x:0,y:0` ile devralır. JS yoksa bom açık statik.
+- Sadece `transform` ve `opacity`; `will-change: transform` katmanlarda.
+- **Reduced motion**: ScrollTrigger kurulmaz; bom açık, CTA görünür.
+- **LCP**: carrier katmanı `index.astro` head'inden `<link rel="preload" as="image" imagesrcset>` ile preload edilir; CSS inline (`inlineStylesheets: 'always'`). Pinned bölüm `100svh`. Scroll ipucu ilk scroll'da kaybolur.
 
 ## SEO gereksinimleri
 
 - Her sayfada benzersiz `<title>` (≤ 60 karakter) ve `<meta name="description">` (≤ 155). Şablon: `{İlçe} Vinç Kiralama | Kurtuluş Vinç — 0532 466 38 74`.
-- `src/components/Seo.astro`: canonical, Open Graph, Twitter card, `og:image` (1200×630, vinç silüeti + logo).
+- `src/components/Seo.astro`: canonical, Open Graph, Twitter card, `og:image` (1200×630, gerçek vinç kompoziti + başlık; `pnpm og`).
 - JSON-LD (`src/components/JsonLd.astro`):
   - Ana sayfa: `HomeAndConstructionBusiness` + `Organization` + `WebSite`; `telephone`, `areaServed` (ilçe listesi), `openingHoursSpecification` (`TODO`), `address` (`addressLocality: Çeşme`, `addressRegion: İzmir`, `addressCountry: TR`; sokak adresi doğrulanınca eklenecek).
   - Hizmet sayfaları: `Service` + `provider`.
@@ -99,7 +101,8 @@ src/
   data/company.json        # isim, telefon, siteUrl, hizmetler, sosyal linkler
   data/districts.json      # slug, ad, benzersiz içerik, öne çıkan iş tipleri
   data/faq.json
-  assets/hero-crane.jpg     # gerçek vinç fotoğrafı (LCP)
+  assets/crane/*.png        # arka plansız gerçek vinç katmanları
+  assets/isler/             # iş fotoğrafları (otomatik galeri)
   components/CraneHero.astro
   components/StickyCta.astro
   components/RegionMap.astro

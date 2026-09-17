@@ -10,23 +10,26 @@
 
 @theme {
   --font-sans: "Inter Tight", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  /* Grafit zemin, sıcak fildişi metin, pirinç vurgu */
-  --color-ink: #0c0e11;
-  --color-ink-2: #13161b;
-  --color-ink-3: #1b1f26;
-  --color-line: #262b33;
-  --color-fog: #e8e4dc;
-  --color-fog-2: #9aa0a8;
-  --color-crane: #c9a961;
-  --color-crane-2: #e0c27c;
-  --color-alert: #c7573a;
+  /* Açık, yumuşak palet: fildişi/kum zemin, sıcak kömür (siyah değil) metin, bal sarısı vurgu */
+  --color-paper: #fbf8f1;
+  --color-paper-2: #f4eee1;
+  --color-paper-3: #ebe3d0;
+  --color-line: #e3dbc8;
+  --color-ink: #2c2820;
+  --color-ink-2: #5b5446;
+  --color-ink-3: #6a6152;
+  --color-crane: #e3a92f;
+  --color-crane-2: #f0be50;
+  --color-crane-deep: #8f620c;
+  --color-alert: #d26a3e;
   --color-safe: #25d366;
+  --color-safe-deep: #117a40;
   --spacing-cta: 56px;
 }
 
 @layer base {
   html {
-    color-scheme: dark;
+    color-scheme: light;
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
   }
@@ -34,12 +37,12 @@
     html { scroll-behavior: auto; }
   }
   body {
-    @apply bg-ink text-fog font-sans antialiased;
+    @apply bg-paper text-ink-2 font-sans antialiased;
     padding-bottom: calc(var(--spacing-cta) + env(safe-area-inset-bottom, 0px));
     font-feature-settings: "ss01", "cv11";
   }
-  ::selection { background: var(--color-crane); color: var(--color-ink); }
-  :focus-visible { outline: 2px solid var(--color-crane); outline-offset: 3px; }
+  ::selection { background: var(--color-crane-2); color: var(--color-ink); }
+  :focus-visible { outline: 2px solid var(--color-crane-deep); outline-offset: 3px; }
   h1, h2, h3 { text-wrap: balance; letter-spacing: -0.02em; }
   p { text-wrap: pretty; }
 }
@@ -51,8 +54,8 @@
 
 @utility grid-lines {
   background-image:
-    linear-gradient(to right, color-mix(in oklab, var(--color-line) 60%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklab, var(--color-line) 60%, transparent) 1px, transparent 1px);
+    linear-gradient(to right, color-mix(in oklab, var(--color-line) 70%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-line) 70%, transparent) 1px, transparent 1px);
   background-size: 56px 56px;
 }
 

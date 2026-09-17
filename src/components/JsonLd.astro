@@ -39,7 +39,7 @@ const organization = {
   address,
   areaServed,
   // TODO: openingHoursSpecification — çalışma saatleri doğrulanınca eklenecek
-  // TODO: sameAs — sosyal medya hesapları doğrulanınca eklenecek
+  sameAs: [company.social.instagram, company.social.facebook, company.social.facebookPage, company.social.googleMaps].filter(Boolean),
   priceRange: '₺₺',
   contactPoint: {
     '@type': 'ContactPoint',

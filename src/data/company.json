@@ -22,14 +22,24 @@
   },
   "founded": "",
   "social": {
-    "_todo": "TODO: sosyal medya hesapları doğrulanınca ekle",
+    "_todo": "TODO: Instagram hesabı doğrulanınca 'instagram' alanına tam URL yazın; boş alanlar sitede gösterilmez. Facebook sayfası arama sonucundan bulundu, doğrulayın.",
     "instagram": "",
-    "facebook": "",
+    "facebook": "https://www.facebook.com/groups/227913824378539/",
+    "facebookPage": "https://www.facebook.com/pages/Kurtulu%C5%9F%20%20Vin%C3%A7%20%C3%87e%C5%9Fme%20Ala%C3%A7at%C4%B1/1383968615163742/",
     "googleMaps": ""
   },
   "areaServed": [
-    "Çeşme", "Alaçatı", "Ilıca", "Dalyan", "Urla", "Gülbahçe",
-    "Karaburun", "Mordoğan", "Seferihisar", "Güzelbahçe", "İzmir"
+    "Çeşme",
+    "Alaçatı",
+    "Ilıca",
+    "Dalyan",
+    "Urla",
+    "Gülbahçe",
+    "Karaburun",
+    "Mordoğan",
+    "Seferihisar",
+    "Güzelbahçe",
+    "İzmir"
   ],
   "services": [
     {
@@ -45,7 +55,12 @@
         "Ağır yük kaldırma ve yerleştirme",
         "TODO: makine parkı ve tonaj bilgisi"
       ],
-      "useCases": ["Çatı ve çelik konstrüksiyon montajı", "Klima ve makine yerleştirme", "Beton kalıp ve prefabrik eleman kaldırma", "Ağaç budama ve kesim desteği"]
+      "useCases": [
+        "Çatı ve çelik konstrüksiyon montajı",
+        "Klima ve makine yerleştirme",
+        "Beton kalıp ve prefabrik eleman kaldırma",
+        "Ağaç budama ve kesim desteği"
+      ]
     },
     {
       "slug": "sepetli-vinc",
@@ -60,7 +75,12 @@
         "Ağaç budama ve palmiye bakımı",
         "TODO: çalışma yüksekliği bilgisi"
       ],
-      "useCases": ["Otel ve site cephe bakımı", "Taş ev çatı onarımı", "Reklam tabelası montajı", "Yüksek aydınlatma direği bakımı"]
+      "useCases": [
+        "Otel ve site cephe bakımı",
+        "Taş ev çatı onarımı",
+        "Reklam tabelası montajı",
+        "Yüksek aydınlatma direği bakımı"
+      ]
     },
     {
       "slug": "hiyap-nakliye",
@@ -75,7 +95,12 @@
         "Bahçe, havuz ve peyzaj malzemesi",
         "TODO: taşıma kapasitesi"
       ],
-      "useCases": ["Şantiye konteyneri taşıma", "Prefabrik bungalov yerleştirme", "Jeneratör ve trafo nakliyesi", "Büyük saksı ve heykel taşıma"]
+      "useCases": [
+        "Şantiye konteyneri taşıma",
+        "Prefabrik bungalov yerleştirme",
+        "Jeneratör ve trafo nakliyesi",
+        "Büyük saksı ve heykel taşıma"
+      ]
     },
     {
       "slug": "insaat-tekne-vinc",
@@ -90,7 +115,12 @@
         "Prefabrik ev ve konteyner yerleştirme",
         "TODO: kaldırma kapasitesi"
       ],
-      "useCases": ["Marina ve balıkçı barınağı tekne operasyonları", "Kış bakımı için karaya alma", "Villa çatı montajı", "Tiny house ve konteyner ev kurulumu"]
+      "useCases": [
+        "Marina ve balıkçı barınağı tekne operasyonları",
+        "Kış bakımı için karaya alma",
+        "Villa çatı montajı",
+        "Tiny house ve konteyner ev kurulumu"
+      ]
     }
   ]
 }
