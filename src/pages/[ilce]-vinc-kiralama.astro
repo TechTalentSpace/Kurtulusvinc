@@ -17,7 +17,7 @@ const others = districts.filter((d) => d.slug !== district.slug);
   <section class="grid-lines border-b border-line pt-28 pb-12 md:pt-36 md:pb-16">
     <div class="container-x">
       <nav aria-label="Breadcrumb" class="mb-4 text-xs text-fog-2"><a href="/" class="hover:text-crane">Ana Sayfa</a> / <span class="text-fog">{district.name}</span></nav>
-      <h1 class="text-4xl font-extrabold text-white md:text-5xl">{district.name} Vinç Kiralama</h1>
+      <h1 class="text-4xl font-semibold tracking-tight text-white md:text-5xl">{district.name} Vinç Kiralama</h1>
       <p class="mt-4 max-w-2xl text-lg text-fog">{district.intro}</p>
       <div class="mt-6 flex flex-wrap gap-3">
         <a href={`tel:${company.phoneE164}`} class="tap inline-flex items-center rounded-full bg-crane px-6 py-3 font-extrabold text-ink">{company.phoneDisplay}</a>

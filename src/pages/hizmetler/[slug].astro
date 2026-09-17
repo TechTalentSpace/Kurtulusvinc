@@ -19,7 +19,7 @@ const others = company.services.filter((s) => s.slug !== service.slug);
   <section class="grid-lines border-b border-line pt-28 pb-12 md:pt-36 md:pb-16">
     <div class="container-x">
       <nav aria-label="Breadcrumb" class="mb-4 text-xs text-fog-2"><a href="/" class="hover:text-crane">Ana Sayfa</a> / <a href="/#hizmetler" class="hover:text-crane">Hizmetler</a> / <span class="text-fog">{service.short}</span></nav>
-      <h1 class="text-4xl font-extrabold text-white md:text-5xl">{service.name}</h1>
+      <h1 class="text-4xl font-semibold tracking-tight text-white md:text-5xl">{service.name}</h1>
       <p class="mt-4 max-w-2xl text-lg text-fog">{service.summary}</p>
       <div class="mt-6 flex flex-wrap gap-3">
         <a href={`tel:${company.phoneE164}`} class="tap inline-flex items-center rounded-full bg-crane px-6 py-3 font-extrabold text-ink">{company.phoneDisplay}</a>
@@ -30,14 +30,14 @@ const others = company.services.filter((s) => s.slug !== service.slug);
 
   <section class="container-x grid gap-10 py-14 md:grid-cols-2">
     <div>
-      <h2 class="text-2xl font-extrabold text-white">Neler yapıyoruz</h2>
+      <h2 class="text-2xl font-semibold text-white">Neler yapıyoruz</h2>
       <ul class="mt-4 space-y-2">
         {service.bullets.map((b) => <li class="flex gap-3 text-fog"><span class="mt-2 h-2 w-2 shrink-0 rounded-sm bg-crane" aria-hidden="true"></span>{b}</li>)}
       </ul>
       <p class="mt-6 rounded-lg border border-line bg-ink-2 p-4 text-sm text-fog-2"><!-- TODO --> {service.capacityNote}</p>
     </div>
     <div>
-      <h2 class="text-2xl font-extrabold text-white">Tipik işler</h2>
+      <h2 class="text-2xl font-semibold text-white">Tipik işler</h2>
       <ul class="mt-4 grid gap-3">
         {service.useCases.map((u) => <li class="rounded-xl border border-line px-4 py-3 text-fog">{u}</li>)}
       </ul>
@@ -46,11 +46,11 @@ const others = company.services.filter((s) => s.slug !== service.slug);
 
   <section class="border-t border-line bg-ink-2 py-14">
     <div class="container-x">
-      <h2 class="text-2xl font-extrabold text-white">Bu hizmeti verdiğimiz ilçeler</h2>
+      <h2 class="text-2xl font-semibold text-white">Bu hizmeti verdiğimiz ilçeler</h2>
       <ul class="mt-4 flex flex-wrap gap-2">
         {districts.map((d) => <li><a href={`/${d.slug}-vinc-kiralama`} class="tap inline-flex items-center rounded-full border border-line px-4 text-sm font-semibold text-fog hover:border-crane hover:text-crane">{d.name}</a></li>)}
       </ul>
-      <h2 class="mt-10 text-2xl font-extrabold text-white">Diğer hizmetler</h2>
+      <h2 class="mt-10 text-2xl font-semibold text-white">Diğer hizmetler</h2>
       <ul class="mt-4 grid gap-3 sm:grid-cols-3">
         {others.map((o) => <li><a href={`/hizmetler/${o.slug}`} class="block rounded-xl border border-line p-4 font-bold text-white hover:border-crane">{o.name}<span class="mt-1 block text-sm font-normal text-fog-2">{o.tagline}</span></a></li>)}
       </ul>

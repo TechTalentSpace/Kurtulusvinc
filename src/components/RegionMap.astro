@@ -38,7 +38,7 @@ const extra = [
       fill="#11161d" stroke="#2f3a47" stroke-width="2" stroke-linejoin="round"
     />
     <!-- ana yol: İzmir - Çeşme -->
-    <path d="M600 246 C 540 262, 480 250, 436 236 C 380 220, 300 260, 240 290 C 200 310, 160 296, 120 296" fill="none" stroke="#f5b301" stroke-width="2" stroke-dasharray="4 8" opacity=".55" />
+    <path d="M600 246 C 540 262, 480 250, 436 236 C 380 220, 300 260, 240 290 C 200 310, 160 296, 120 296" fill="none" stroke="#c9a961" stroke-width="2" stroke-dasharray="4 8" opacity=".55" />
     <!-- ikincil noktalar -->
     {extra.map((e) => (
       <g>
@@ -51,8 +51,8 @@ const extra = [
       const p = pos[d.slug];
       return (
         <a href={`/${d.slug}-vinc-kiralama`} class="region-dot group focus:outline-none" data-district={d.slug} style={`--i:${i}`} aria-label={`${d.name} vinç kiralama`}>
-          <circle cx={p.x} cy={p.y} r="16" fill="#f5b301" opacity="0" class="halo" />
-          <circle cx={p.x} cy={p.y} r="6" fill="#0b0f14" stroke="#f5b301" stroke-width="3" class="dot" />
+          <circle cx={p.x} cy={p.y} r="16" fill="#c9a961" opacity="0" class="halo" />
+          <circle cx={p.x} cy={p.y} r="6" fill="#0c0e11" stroke="#c9a961" stroke-width="3" class="dot" />
           <text x={p.x + (p.anchor === 'end' ? -12 : p.anchor === 'middle' ? 0 : 12)} y={p.y + (p.dy ?? 0)} text-anchor={p.anchor ?? 'start'} font-size="15" font-weight="800" fill="#ffffff" class="lbl" dominant-baseline={p.dy && p.dy < 0 ? 'auto' : 'middle'}>{d.name}</text>
         </a>
       );
@@ -69,8 +69,8 @@ const extra = [
   .js-motion [data-region-map].is-lit .region-dot .dot { opacity: 1; transform: scale(1); }
   .js-motion [data-region-map].is-lit .region-dot .lbl { opacity: 1; }
   .js-motion [data-region-map].is-lit .region-dot .halo { opacity: .22; transform: scale(1); }
-  .region-dot:hover .dot, .region-dot:focus-visible .dot { fill: #f5b301; }
-  .region-dot:hover .lbl, .region-dot:focus-visible .lbl { fill: #f5b301; }
+  .region-dot:hover .dot, .region-dot:focus-visible .dot { fill: #c9a961; }
+  .region-dot:hover .lbl, .region-dot:focus-visible .lbl { fill: #c9a961; }
   .region-dot:hover .halo, .region-dot:focus-visible .halo { opacity: .35 !important; transition-delay: 0s; }
   @media (prefers-reduced-motion: reduce) {
     .region-dot .dot, .region-dot .lbl, .region-dot .halo { transition: none; }

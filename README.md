@@ -23,8 +23,8 @@ src/
   data/company.json        # isim, telefon, siteUrl, hizmetler, adres (placeholder)
   data/districts.json      # 8 ilçe: slug, başlık, açıklama, benzersiz içerik, iş tipleri
   data/faq.json            # SSS (FAQPage şeması buradan üretilir)
-  components/CraneHero.astro   # pinned hero bölümü + GSAP yükleyici
-  components/CraneSvg.astro    # inline vinç SVG (#boom-1..4 iç içe, #hook)
+  assets/hero-crane.jpg        # gerçek vinç fotoğrafı (astro:assets ile AVIF/WebP)
+  components/CraneHero.astro   # pinned foto hero + GSAP yükleyici
   components/RegionMap.astro   # stilize yarımada haritası, ilçeler scroll'da yanar
   components/StickyCta.astro   # alt sabit [Ara] [WhatsApp] çubuğu
   components/Seo.astro         # title/description/canonical/OG/Twitter
@@ -42,16 +42,20 @@ public/
   fonts/inter-tight-var.woff2  # Inter Tight değişken, wght 400–800, Türkçe alt küme (26 KB)
   _headers / vercel.json / netlify.toml
   robots.txt, favicon.svg, logo.svg, og-default.png, site.webmanifest
-scripts/og.mjs             # OG görseli üretici (sharp)
+scripts/og.mjs             # OG görseli üretici (fotoğraf + metin, sharp)
+scripts/hero-photo.mjs     # yeni vinç fotoğrafını kırpıp renk düzenler
 ```
 
-## Hero animasyonu
+## Tasarım dili
 
-- `#hero` `100svh`, ScrollTrigger ile pinlenir (mobil `+=220%`, masaüstü `+=300%`, `scrub: 0.6`).
-- Bom `#boom` grubu pivot etrafında -35° döndürülmüş; `#boom-1..4` iç içe `<g>` ve yalnızca `x` ile 130 birim uzar. Her segment sonunda ilgili hizmet etiketi `opacity/y` ile gelir.
-- Son %15: kablo `scaleY`, `#hook-body` `y` ile iner, "Hemen Ara" CTA `y: 40 → 0`.
-- `prefers-reduced-motion: reduce` → ScrollTrigger kurulmaz, bom açık ve kanca inmiş statik gösterilir.
-- GSAP `requestIdleCallback` ile yüklenir; JS gelmeden bom kapalı, CTA ve etiketler görünür (progressive enhancement).
+Grafit zemin (`#0C0E11`), sıcak fildişi metin (`#E8E4DC`), tek vurgu pirinç (`#C9A961`). Şantiye sarısı ve diyagonal şerit yok. Mobil birincil.
+
+## Hero
+
+- Gerçek vinç fotoğrafı, `100svh`, ScrollTrigger ile pinlenir (mobil `+=120%`, masaüstü `+=140%`).
+- Scroll'da fotoğraf `scale 1.06→1.28` ve sola kayar, ton koyulaşır, metin yukarı süzülüp söner. Yalnızca transform/opacity.
+- `prefers-reduced-motion` → statik.
+- **Kendi fotoğrafınızı koymak için:** `node scripts/hero-photo.mjs <foto.jpg>` → `src/assets/hero-crane.jpg` üretir; sonra `pnpm og` ile OG görselini yenileyin ve `Base.astro` footer'daki Flickr atıf satırını silin.
 
 ## Deploy
 
@@ -63,10 +67,10 @@ scripts/og.mjs             # OG görseli üretici (sharp)
 
 | Sayfa | Perf | SEO | A11y | LCP | CLS |
 |---|---|---|---|---|---|
-| `/` | 100 | 100 | 100 | 1.4 s | 0 |
+| `/` | 100 | 100 | 100 | 1.7 s | 0 |
 | `/alacati-vinc-kiralama` | 100 | 100 | 100 | 1.2 s | 0 |
 
-JS: tek bundle 116 KB / **46 KB gzip** (GSAP core + ScrollTrigger + hero). Font 26 KB. Hero SVG ~7 KB.
+JS: tek bundle 116 KB / **46 KB gzip** (GSAP core + ScrollTrigger + hero). Font 26 KB. Hero fotoğrafı AVIF/WebP, mobilde ~40–60 KB.
 
 ## TODO — firma tarafından doğrulanacaklar
 
@@ -82,3 +86,4 @@ Uydurma bilgi yazılmadı; aşağıdakiler koda `TODO:` olarak işaretli.
 8. **Form** — Vercel'e deploy edilirse Formspree endpoint'i (`index.astro`, `iletisim.astro`).
 9. **Alan adı** — `kurtulusvinc.com` varsayım; `company.json > siteUrl`.
 10. **Referans / yorum** — sitede yok; gerçek müşteri yorumu gelince eklenecek bölüm.
+11. **Hero fotoğrafı** — şu an Flickr CC BY 2.0 (Rab.) stok fotoğraf, footer'da atıf var. Firmanın kendi vinciyle değiştirilecek.
