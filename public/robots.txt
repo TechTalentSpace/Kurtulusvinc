@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://kurtulusvinc.com/sitemap-index.xml

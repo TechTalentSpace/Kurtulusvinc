@@ -1,9 +1,0 @@
-[build]
-  command = "pnpm build"
-  publish = "dist"
-
-[build.environment]
-  NODE_VERSION = "22"
-
-# Güvenlik ve cache başlıkları public/_headers dosyasından gelir.
-# İletişim formu: Netlify Forms (data-netlify="true"), ek yapılandırma gerekmez.

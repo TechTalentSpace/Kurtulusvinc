@@ -1,99 +1,56 @@
 # Kurtuluş Vinç — kurtulusvinc.com
 
-Çeşme/Alaçatı merkezli vinç firması için mobil öncelikli, scroll-animasyonlu, yerel SEO odaklı tanıtım sitesi. Tüm kararlar `CLAUDE.md` içinde.
+Çeşme/Alaçatı merkezli vinç firmasının statik tanıtım sitesi. YEAP Event sitesinin (DarkStar) şablonu üzerine kurulmuştur; hero bölümünde firmanın kendi vinç videosu sessiz ve döngüsel oynar. Tüm kararlar `CLAUDE.md` içinde.
 
 ## Çalıştırma
 
+Build adımı yok, saf HTML/CSS/JS.
+
 ```bash
-pnpm install
-pnpm dev        # http://localhost:4321
-pnpm build      # dist/ üretir
-pnpm preview    # build çıktısını sunar
-pnpm check      # Astro + TypeScript kontrolü
-pnpm og         # public/og-default.png ve apple-touch-icon.png üretir
-pnpm lhci       # Lighthouse CI (lighthouserc.json), önce pnpm build
+python3 -m http.server 4325     # http://127.0.0.1:4325/
 ```
 
-Node 22, pnpm 10. Stack: Astro 5 (statik), Tailwind 4, GSAP 3 + ScrollTrigger (yalnızca hero), TypeScript.
+Deploy: Vercel (`vercel.json`, `cleanUrls: true`). Depoyu bağlamak yeterli.
 
 ## Yapı
 
 ```
-src/
-  data/company.json        # isim, telefon, siteUrl, hizmetler, adres (placeholder)
-  data/districts.json      # 8 ilçe: slug, başlık, açıklama, benzersiz içerik, iş tipleri
-  data/faq.json            # SSS (FAQPage şeması buradan üretilir)
-  assets/truck/*.png           # arka plansız Kurtuluş kamyonu + 5 tekerlek dairesi
-  assets/isler/*.webp          # firma iş fotoğrafları: hero durakları + galeri (buraya atılan her görsel galeride listelenir)
-  components/RoadHero.astro    # "Yol" hero'su: pinned, duraklar + kamyon + tekerlekler
-  components/RegionMap.astro   # stilize yarımada haritası, ilçeler scroll'da yanar
-  components/StickyCta.astro   # alt sabit [Ara] [WhatsApp] çubuğu
-  components/Seo.astro         # title/description/canonical/OG/Twitter
-  components/JsonLd.astro      # sayfa tipine göre JSON-LD
-  layouts/Base.astro
-  pages/index.astro
-  pages/hizmetler/[slug].astro
-  pages/[ilce]-vinc-kiralama.astro
-  pages/iletisim.astro
-  pages/sss.astro
-  pages/404.astro
-  scripts/road.ts          # ScrollTrigger yol timeline'ı (track, tekerlek, yol çizgisi, bulut)
-  styles/global.css        # Tailwind tema, font-face, utility'ler
-public/
-  fonts/inter-tight-var.woff2  # Inter Tight değişken, wght 400–800, Türkçe alt küme (26 KB)
-  _headers / vercel.json / netlify.toml
-  robots.txt, favicon.svg, logo.svg, og-default.png, site.webmanifest
-scripts/og.mjs             # OG görseli üretici (kamyon + metin, sharp)
-scripts/truck-layers.py    # kamyon fotoğrafından arka plansız araç + tekerlek daireleri (rembg)
+index.html                       Ana sayfa: hero video, hizmetler, galeri, bölgeler, iletişim
+hizmet-*.html                    4 hizmet sayfası
+*-vinc-kiralama.html             8 ilçe sayfası (benzersiz içerik)
+sss.html / iletisim.html / 404.html
+sitemap.xml / robots.txt
+assets/
+  css/theme.css                  Şablon CSS'i (düzenlenmez)
+  css/theme-colors.css           Şablon renkleri
+  css/site.css                   Siteye özel stiller (galeri, bölge kartları, logo, form)
+  js/theme.js                    Şablon JS'i (düzenlenmez)
+  js/site.js                     Hero video güvencesi + WhatsApp formu
+  vendor/                        jQuery, Bootstrap, GSAP, Slick, Parallax, offcanvas-nav, Icomoon
+  images/                        Firma fotoğrafları + şablon arka planları + logo
+  video/vinc-video.mp4           Hero videosu (1280×720, ~20 sn, 12 MB)
+api/                             YEAP'ten gelen form fonksiyonları — bu sitede kullanılmıyor
 ```
 
-## Tasarım dili
+## Hero videosunu değiştirmek
 
-Palet kamyondan: Iveco mavisi (`#1D3F9F`) ve tabela sarısı (`#F4C430`, yalnızca butonlar); zemin Çeşme gökyüzü ve kum, kartlar beyaz, metin lacivert-kömür (siyah değil). Mobil birincil.
-
-## Hero — "Yol"
-
-- Kurtuluş'un mavi Iveco'su (arka planı kaldırılmış gerçek fotoğraf) yolun üstünde durur; scroll ile duraklar sola akar, tekerlekler mesafeye göre döner, yol çizgisi kayar, kamyon hafif sallanır.
-- 5 durak = 5 gerçek iş fotoğrafı (marina, şantiye, tersane, bağ, villa) + son durak "Neredesiniz?" ile Ara / Konum gönder.
-- JS yoksa veya `prefers-reduced-motion`: pin yok, duraklar parmakla kaydırılır (scroll-snap).
-- **Kamyon fotoğrafını değiştirmek için:** yandan, düz arka planlı net bir fotoğraf; `pip install rembg onnxruntime pillow numpy`, `python3 scripts/truck-layers.py foto.jpg`; script'teki `CROP` ve `WHEELS` (tekerlek merkez/yarıçap) yeni fotoğrafa göre güncellenir, çıktıdaki yüzdeler `RoadHero.astro > WHEELS` listesine yazılır. Sonra `pnpm og`.
+Yeni videoyu `assets/video/vinc-video.mp4` olarak kopyalayın. Poster görselini de değiştirmek isterseniz `assets/images/hero-poster.webp` dosyasını güncelleyin. Başka düzenleme gerekmez.
 
 ## İş fotoğrafları
 
-`src/assets/isler/` içine `jpg/png/webp` atın; ana sayfadaki "Yolda çektiklerimiz" galerisi otomatik dolar. Hero durakları `RoadHero.astro` içindeki `stops` listesinden (dosya adıyla) seçilir. Dosya adı alt metin olur (`alacati-cati-montaji.jpg` → "alacati cati montaji"); Türkçe karakter kullanılabilir. Klasör boşken yer tutucu grid görünür.
+`assets/images/` içindeki `*.webp` dosyaları firmanın kendi fotoğraflarıdır. Ana sayfadaki galeri ve sayfa başlıkları bu dosyalardan beslenir; yeni fotoğraf eklerken ilgili `<figure>` bloğunu kopyalayın.
 
-## Sosyal bağlantılar
+## İletişim formu
 
-`src/data/company.json > social`: `instagram`, `facebook`, `facebookPage`, `googleMaps`. Dolu olanlar footer'da ve iletişim sayfasında görünür, JSON-LD `sameAs`'e girer. WhatsApp `company.whatsapp`.
-
-## Deploy
-
-- **Netlify**: `netlify.toml` + `public/_headers`; form `data-netlify="true"` ile çalışır.
-- **Vercel**: `vercel.json` (cleanUrls + başlıklar). Form için Formspree endpoint'i gerekir (TODO).
-- Çıktı `build.format: 'file'` → `/sss.html` gibi; `trailingSlash: 'never'` ile canonical `/sss`.
-
-## Ölçümler (yerel, Lighthouse 12, mobil simülasyon)
-
-| Sayfa | Perf | SEO | A11y | LCP | CLS |
-|---|---|---|---|---|---|
-| `/` | 97 | 100 | 100 | 2.6 s | 0 |
-| `/alacati-vinc-kiralama` | 100 | 100 | 100 | 1.2 s | 0 |
-
-JS: tek bundle 116 KB / **46 KB gzip** (GSAP core + ScrollTrigger + yol). Font 26 KB. Kamyon WebP mobilde 110 KB, ilk durak fotoğrafı ~35 KB, diğer duraklar lazy. CSS inline. LCP simülasyonda hedefin biraz üstünde (metin + font); gerçek cihazda daha iyi.
+Backend yok. Form gönderildiğinde `assets/js/site.js` metni WhatsApp mesajına çevirip `wa.me/905324663874` bağlantısını açar.
 
 ## TODO — firma tarafından doğrulanacaklar
 
-Uydurma bilgi yazılmadı; aşağıdakiler koda `TODO:` olarak işaretli.
-
-1. **Sokak adresi** — `company.json > address.streetAddress/postalCode`; footer, iletişim ve JSON-LD `PostalAddress`.
-2. **Çalışma saatleri** — `company.json > openingHours`; JSON-LD `openingHoursSpecification` eklenecek, iletişim sayfasındaki "TODO: çalışma saatleri" metni.
-3. **Hizmetler ve tonajlar** — `company.json > services[].capacityNote` ve `bullets` içindeki "TODO" satırları (makine parkı, tonaj, bom uzunluğu, sepet yüksekliği, hiyap kapasitesi, tekne kaldırma kapasitesi).
-4. **Neden biz — 4. madde** — 7/24 hizmet, sigorta ve belge iddiaları teyit edilince `index.astro > why[3]`.
-5. **İş fotoğrafları** — 5 firma fotoğrafı eklendi; yenileri `src/assets/isler/` klasörüne atılınca galeriye girer.
-6. **Sosyal medya / Google Maps** — `company.json > social`; JSON-LD `sameAs`.
-7. **E-posta** — `company.json > email` boş.
-8. **Form** — Vercel'e deploy edilirse Formspree endpoint'i (`index.astro`, `iletisim.astro`).
-9. **Alan adı** — `kurtulusvinc.com` varsayım; `company.json > siteUrl`.
-10. **Referans / yorum** — sitede yok; gerçek müşteri yorumu gelince eklenecek bölüm.
-11. **Hero kamyonu** — firmanın zeytin ağaçlı Iveco fotoğrafından kesildi; daha temiz/yüksek çözünürlüklü bir yandan fotoğraf gelirse `truck-layers.py` ile yenilenir.
-12. **Instagram** — hesap URL'si `company.json > social.instagram`; Facebook grubu arama sonucundan eklendi, doğrulanmalı.
+1. **Sokak adresi** — şu an yalnızca "Çeşme / Alaçatı, İzmir" yazıyor (`iletisim.html`, footer, JSON-LD).
+2. **Çalışma saatleri** — `iletisim.html` içinde TODO yorumu.
+3. **Tonaj ve kapasite** — hizmet sayfalarındaki TODO yorumları (makine parkı, bom uzunluğu, sepet yüksekliği, hiyap ve tekne kaldırma kapasitesi).
+4. **Instagram hesabı** — henüz eklenmedi; Facebook grubu bağlantısı doğrulanmalı.
+5. **E-posta adresi** — sitede yok.
+6. **Alan adı** — `kurtulusvinc.com` varsayım.
+7. **Yeni fotoğraf ve video** — sahadan gelen her yeni görsel galeriye eklenebilir.
+8. **Şablon lisansı** — DarkStar ticari bir temadır; bu ikinci site için lisans durumu firma tarafından kontrol edilmeli.
