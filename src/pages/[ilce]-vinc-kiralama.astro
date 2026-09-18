@@ -20,8 +20,8 @@ const others = districts.filter((d) => d.slug !== district.slug);
       <h1 class="text-4xl font-semibold tracking-tight text-ink md:text-5xl">{district.name} Vinç Kiralama</h1>
       <p class="mt-4 max-w-2xl text-lg text-ink-2">{district.intro}</p>
       <div class="mt-6 flex flex-wrap gap-3">
-        <a href={`tel:${company.phoneE164}`} class="tap inline-flex items-center rounded-full bg-crane px-6 py-3 font-extrabold text-ink">{company.phoneDisplay}</a>
-        <a href={company.whatsapp} target="_blank" rel="noopener" class="tap inline-flex items-center rounded-full border border-safe-deep px-6 py-3 font-bold text-safe-deep">WhatsApp</a>
+        <a href={`tel:${company.phoneE164}`} class="btn-solid">{company.phoneDisplay}</a>
+        <a href={company.whatsapp} target="_blank" rel="noopener" class="btn-ghost">WhatsApp</a>
       </div>
     </div>
   </section>

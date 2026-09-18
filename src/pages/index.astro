@@ -1,177 +1,94 @@
 ---
 import Base from '@/layouts/Base.astro';
 import JsonLd from '@/components/JsonLd.astro';
-import RoadHero from '@/components/RoadHero.astro';
-import RegionMap from '@/components/RegionMap.astro';
 import company from '@/data/company.json';
-import districts from '@/data/districts.json';
-import faq from '@/data/faq.json';
-import { getImage, Image } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
-import truck from '@/assets/truck/truck.png';
-// LCP: kamyon katmanini head'den preload et
-const truckImg = await getImage({ src: truck, widths: [560, 800, 1230], quality: 68, format: 'webp' });
+import { worlds } from '@/data/worlds';
 
-// Is fotograflari: src/assets/isler/ klasorune atilan her gorsel otomatik listelenir (dosya adi alt metin olur)
-const islerGlob = import.meta.glob('../assets/isler/*.{jpg,jpeg,png,webp}', { eager: true }) as Record<string, { default: ImageMetadata }>;
-function altFromPath(path: string): string {
-  const file = path.split('/').pop() ?? '';
-  const base = file.substring(0, file.lastIndexOf('.') > 0 ? file.lastIndexOf('.') : file.length);
-  return base.split('-').join(' ').split('_').join(' ');
-}
-const isler = Object.entries(islerGlob)
-  .map(([path, mod]) => ({ src: mod.default, alt: altFromPath(path) }))
-  .sort((a, b) => a.alt.localeCompare(b.alt, 'tr'));
-
-const title = 'Çeşme Alaçatı Vinç Kiralama | Kurtuluş Vinç — 0532 466 38 74';
-const description = 'Çeşme, Alaçatı, Urla ve yarımadada operatörlü mobil vinç, sepetli platform ve hiyap nakliye. Tekne indirme, çatı, prefabrik. Hemen arayın.';
-const why = [
-  { t: 'Yarımadanın içinden', d: 'Çeşme merkezliyiz; yolda kalan araç, tekne ya da şantiye için kısa sürede yanınızdayız.', icon: 'M3 12h18M12 3l9 9-9 9' },
-  { t: 'Operatörlü kiralama', d: 'Her vinç deneyimli operatörle gelir; yükü birlikte planlarız.', icon: 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z' },
-  { t: 'Deniz ve kara işleri', d: 'Tekne indirme-bindirme, çatı, prefabrik ve konteyner aynı ekipte.', icon: 'M2 20c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M4 16l2-8h12l2 8M12 4v4' },
-  { t: 'TODO: doğrulanacak', d: 'TODO: 7/24 hizmet, sigorta ve belge bilgileri firma tarafından teyit edilince yazılacak.', icon: 'M12 9v4M12 17h.01M12 3l9 16H3z' },
-];
+const title = 'Kurtuluş Vinç — Çeşme Alaçatı Vinç, Tekne ve Nakliye';
+const description = 'Çeşme ve Alaçatı\'da vinç, hiyap ve nakliye: tekne indirme-bindirme, zeytin ağacı ve tiny house nakli, araç kurtarma. Yarımadanın her yoluna. 0532 466 38 74';
 ---
 <Base title={title} description={description} path="/">
   <Fragment slot="head">
-    <link rel="preload" as="image" imagesrcset={truckImg.srcSet.attribute} imagesizes="(min-width: 768px) 44vw, 96vw" fetchpriority="high" />
     <JsonLd kind="home" path="/" />
+    <link rel="preload" href="/models/tekne.glb" as="fetch" crossorigin />
   </Fragment>
 
-  <RoadHero />
+  <div id="stage" aria-hidden="true"><canvas id="stage-canvas"></canvas></div>
+  <div class="grain" aria-hidden="true"></div>
 
-  <!-- HİZMETLER -->
-  <section id="hizmetler" class="container-x scroll-mt-20 py-16 md:py-24">
-    <div class="mb-8 flex items-end justify-between gap-4" data-reveal>
-      <div>
-        <p class="text-xs font-bold uppercase tracking-[0.2em] text-sea">Hizmetler</p>
-        <h2 class="mt-2 text-3xl font-semibold tracking-tight text-ink md:text-4xl">Ne taşırız, ne kaldırırız</h2>
-      </div>
-    </div>
-    <ul class="grid gap-4 sm:grid-cols-2">
-      {company.services.map((s, i) => (
-        <li data-reveal>
-          <a href={`/hizmetler/${s.slug}`} class="group relative flex h-full flex-col rounded-2xl border border-line bg-white p-6 shadow-[0_10px_30px_-18px_rgba(44,40,32,.25)] transition-colors hover:border-crane">
-            <span class="hazard-stripe absolute inset-x-6 top-0 h-px opacity-0 transition-opacity group-hover:opacity-100" aria-hidden="true"></span>
-            <span class="mb-4 inline-flex h-9 w-9 items-center justify-center rounded-full bg-sky text-sm font-bold text-sea">{i + 1}</span>
-            <h3 class="text-xl font-semibold text-ink">{s.name}</h3>
-            <p class="mt-2 text-sm text-ink-3">{s.tagline}</p>
-            <span class="mt-auto pt-6 text-sm font-bold text-sea">Detay →</span>
-          </a>
-        </li>
-      ))}
-    </ul>
-  </section>
+  <!-- Yükleyici -->
+  <div data-loader class="hud fade inset-0 z-30 flex flex-col items-center justify-center bg-paper">
+    <p class="hud-label text-ink-3">Kurtuluş Vinç</p>
+    <p class="mt-6 font-mono text-5xl font-medium tabular-nums text-ink"><span data-loader-pct>000</span></p>
+    <div class="mt-6 h-px w-40 bg-line"><div data-loader-bar class="loader-bar h-px w-full origin-left scale-x-0 bg-ink transition-transform duration-300"></div></div>
+    <p class="hud-label mt-6 text-ink-3">Sahne hazırlanıyor</p>
+  </div>
 
-  <!-- BÖLGE -->
-  <section id="bolge" class="scroll-mt-20 border-y border-line bg-paper-2 py-16 md:py-24">
-    <div class="container-x grid gap-10 md:grid-cols-12 md:items-center">
-      <div class="md:col-span-5" data-reveal>
-        <p class="text-xs font-bold uppercase tracking-[0.2em] text-sea">Çalışma bölgesi</p>
-        <h2 class="mt-2 text-3xl font-semibold tracking-tight text-ink md:text-4xl">Yarımadanın her noktasına</h2>
-        <p class="mt-4 text-ink-2">Çeşme merkezden çıkıp Karaburun'un ucuna, Seferihisar'ın sahiline kadar gidiyoruz. İlçenizi seçin, o bölgeye özgü işleri görün.</p>
-        <ul class="mt-6 flex flex-wrap gap-2">
-          {districts.map((d) => (
-            <li><a href={`/${d.slug}-vinc-kiralama`} class="tap inline-flex items-center rounded-full border border-line px-4 text-sm font-semibold text-ink-2 hover:border-crane hover:text-sea">{d.name}</a></li>
-          ))}
-        </ul>
-        <p class="mt-4 text-sm text-ink-3">Ayrıca: Dalyan, Mordoğan ve İzmir merkez.</p>
-      </div>
-      <div class="md:col-span-7" data-reveal>
-        <RegionMap />
-      </div>
-    </div>
-  </section>
-
-  <!-- NEDEN BİZ -->
-  <section class="container-x py-16 md:py-24">
-    <div data-reveal>
-      <p class="text-xs font-bold uppercase tracking-[0.2em] text-sea">Neden biz</p>
-      <h2 class="mt-2 text-3xl font-semibold tracking-tight text-ink md:text-4xl">Neden Kurtuluş Vinç</h2>
-    </div>
-    <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {why.map((w) => (
-        <li class="rounded-2xl border border-line bg-white p-6" data-reveal>
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1d3f9f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={w.icon} /></svg>
-          <h3 class="mt-4 font-bold text-ink">{w.t}</h3>
-          <p class="mt-1 text-sm text-ink-3">{w.d}</p>
-        </li>
-      ))}
-    </ul>
-  </section>
-
-  <!-- İŞ FOTOĞRAFLARI -->
-  <section class="border-y border-line bg-paper-2 py-16 md:py-24">
-    <div class="container-x">
-      <div data-reveal>
-        <p class="text-xs font-bold uppercase tracking-[0.2em] text-sea">Sahadan</p>
-        <h2 class="mt-2 text-3xl font-semibold tracking-tight text-ink md:text-4xl">Yolda çektiklerimiz</h2>
-        {isler.length === 0 && <p class="mt-2 text-sm text-ink-3">Fotoğraflar yakında. <!-- TODO: gerçek fotoğraflar src/assets/isler/ klasörüne --></p>}
-      </div>
-      {isler.length > 0 ? (
-        <ul class="mt-8 grid grid-cols-2 gap-3 md:grid-cols-4">
-          {isler.map((f) => (
-            <li class="overflow-hidden rounded-xl border border-line bg-white" data-reveal>
-              <Image src={f.src} alt={`Kurtuluş Vinç saha fotoğrafı: ${f.alt}`} widths={[320, 640, 960]} sizes="(min-width: 768px) 25vw, 50vw" loading="lazy" decoding="async" class="aspect-[4/3] h-auto w-full object-cover" />
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <ul class="mt-8 grid grid-cols-2 gap-3 md:grid-cols-4" aria-label="Fotoğraf yer tutucuları">
-          {['Tekne indirme', 'Çatı montajı', 'Prefabrik yerleştirme', 'Sepetli cephe işi', 'Konteyner nakliye', 'Klima montajı', 'Ağaç budama', 'Marina operasyonu'].map((c) => (
-            <li class="grid-lines relative aspect-[4/3] overflow-hidden rounded-xl border border-line bg-paper-3" data-reveal>
-              <span class="hazard-stripe absolute inset-x-0 top-0 h-px opacity-70" aria-hidden="true"></span>
-              <span class="absolute inset-x-3 bottom-3 text-xs font-semibold text-ink-3">{c}</span>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  </section>
-
-  <!-- SSS -->
-  <section class="container-x py-16 md:py-24">
-    <div data-reveal>
-      <p class="text-xs font-bold uppercase tracking-[0.2em] text-sea">Sık sorulanlar</p>
-      <h2 class="mt-2 text-3xl font-semibold tracking-tight text-ink md:text-4xl">Aklınızdakiler</h2>
-    </div>
-    <div class="mt-8 divide-y divide-line border-y border-line">
-      {faq.map((f) => (
-        <details class="group py-4" data-reveal>
-          <summary class="tap flex cursor-pointer list-none items-center justify-between gap-4 font-bold text-ink [&::-webkit-details-marker]:hidden">
-            {f.q}
-            <span class="text-sea transition-transform group-open:rotate-45" aria-hidden="true">+</span>
-          </summary>
-          <p class="mt-3 text-ink-2">{f.a}</p>
-        </details>
-      ))}
-    </div>
-    <a href="/sss" class="tap mt-6 inline-flex items-center font-bold text-sea">Tüm sorular →</a>
-  </section>
-
-  <!-- İLETİŞİM -->
-  <section id="iletisim" class="border-t border-line bg-paper-2 py-16 md:py-24">
-    <div class="container-x grid gap-10 md:grid-cols-2">
-      <div data-reveal>
-        <p class="text-xs font-bold uppercase tracking-[0.2em] text-sea">İletişim</p>
-        <h2 class="mt-2 text-3xl font-semibold tracking-tight text-ink md:text-4xl">Konumu söyleyin, yola çıkalım</h2>
-        <p class="mt-4 text-ink-2">En hızlı yol telefon. WhatsApp'tan konum ve fotoğraf gönderirseniz keşif kolaylaşır.</p>
-        <div class="mt-6 flex flex-col gap-3 sm:flex-row">
-          <a href={`tel:${company.phoneE164}`} class="tap inline-flex items-center justify-center rounded-full bg-crane px-6 py-3 text-lg font-extrabold text-ink">{company.phoneDisplay}</a>
-          <a href={company.whatsapp} target="_blank" rel="noopener" class="tap inline-flex items-center justify-center rounded-full border border-safe-deep px-6 py-3 font-bold text-safe-deep">WhatsApp'tan yaz</a>
+  <!-- Lobi: seçim -->
+  <section data-lobby class="hud fade is-hidden inset-x-0 bottom-0 top-0 pointer-events-none">
+    <div class="container-x flex h-full flex-col justify-end pb-10 md:justify-center md:pb-0">
+      <div class="pointer-events-auto max-w-md">
+        <p data-lobby-eyebrow class="hud-label text-sea">{worlds[0].eyebrow}</p>
+        <h1 data-lobby-title class="mt-3 text-[2.6rem] font-medium leading-[1.02] tracking-[-0.03em] text-ink md:text-6xl">{worlds[0].headline}</h1>
+        <p data-lobby-intro class="mt-4 max-w-sm text-[15px] leading-relaxed text-ink-2 md:text-base">{worlds[0].intro}</p>
+        <div class="mt-6 flex items-center gap-3">
+          <button data-enter type="button" class="btn-solid">{worlds[0].label} dünyasına gir</button>
         </div>
-        <address class="mt-6 not-italic text-sm text-ink-3">{company.name} · {company.areaLabel}</address>
       </div>
-      <form name="iletisim" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/iletisim?gonderildi=1" class="grid gap-3 rounded-2xl border border-line bg-white p-6" data-reveal>
-        <input type="hidden" name="form-name" value="iletisim" />
-        <p class="hidden"><label>Bu alanı boş bırakın: <input name="bot-field" /></label></p>
-        <label class="grid gap-1 text-sm font-semibold text-ink-2">Adınız<input required name="ad" autocomplete="name" class="tap rounded-lg border border-line bg-paper px-3 text-ink" /></label>
-        <label class="grid gap-1 text-sm font-semibold text-ink-2">Telefon<input required type="tel" name="telefon" autocomplete="tel" inputmode="tel" class="tap rounded-lg border border-line bg-paper px-3 text-ink" /></label>
-        <label class="grid gap-1 text-sm font-semibold text-ink-2">Konum / ilçe<input name="konum" class="tap rounded-lg border border-line bg-paper px-3 text-ink" placeholder="Örn. Alaçatı, Hacımemiş" /></label>
-        <label class="grid gap-1 text-sm font-semibold text-ink-2">İş kısaca<textarea name="mesaj" rows="3" class="rounded-lg border border-line bg-paper px-3 py-2 text-ink" placeholder="Örn. 8 m tekne karaya alma"></textarea></label>
-        <button type="submit" class="tap mt-1 rounded-full bg-crane px-6 py-3 font-extrabold text-ink hover:bg-crane-2">Gönder</button>
-        <p class="text-xs text-ink-3">Form Netlify Forms ile çalışır. <!-- TODO: Vercel'e deploy edilirse Formspree endpoint'i ile değiştir --></p>
-      </form>
+      <div class="pointer-events-auto mt-8 flex gap-2 md:absolute md:bottom-10 md:left-1/2 md:mt-0 md:-translate-x-1/2" role="tablist" aria-label="Dünyalar">
+        {worlds.map((w, i) => (
+          <button data-tab type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'} class="hud-label rounded-full border border-transparent px-4 py-2 text-ink-3 transition aria-selected:border-line aria-selected:text-ink">{w.label}</button>
+        ))}
+      </div>
     </div>
   </section>
+  <p data-hint class="hud hud-label fade is-hidden bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-4 whitespace-nowrap text-ink-3 md:bottom-4 md:right-8 md:left-auto md:translate-x-0"><span>Kaydır · Seç</span><button data-text-version type="button" class="pointer-events-auto underline-offset-4 hover:text-ink hover:underline">Metin sürümü ↓</button></p>
+
+  <!-- Dünya paneli -->
+  <section data-world class="hud fade is-hidden inset-x-0 bottom-0 pointer-events-none md:top-0">
+    <div class="container-x flex h-full flex-col justify-end pb-8 md:grid md:grid-cols-12 md:items-center md:pb-0">
+      <div class="pointer-events-auto rounded-2xl bg-paper/70 p-5 backdrop-blur-md md:col-span-5 md:rounded-none md:bg-transparent md:p-0 md:backdrop-blur-0">
+        <button data-back type="button" class="hud-label mb-4 inline-flex items-center gap-2 text-ink-3 hover:text-ink"><span aria-hidden="true">←</span> Geri</button>
+        <p data-world-eyebrow class="hud-label text-sea"></p>
+        <h2 data-world-headline class="mt-2 text-3xl font-medium tracking-[-0.03em] text-ink md:text-5xl"></h2>
+        <div class="mt-5 flex items-center gap-2" aria-label="Adımlar">
+          {[0, 1, 2].map((k) => <button data-dot type="button" aria-label={`Adım ${k + 1}`} class={`h-1.5 w-8 rounded-full bg-line transition ${k === 0 ? 'bg-ink' : ''}`}></button>)}
+        </div>
+        <h3 data-step-title class="mt-4 text-lg font-medium text-ink md:text-xl"></h3>
+        <p data-step-text class="mt-2 max-w-md text-[15px] leading-relaxed text-ink-2"></p>
+        <div class="mt-5 flex flex-wrap items-center gap-3">
+          <button data-next type="button" class="btn-ghost">Devam</button>
+          <a href={`tel:${company.phoneE164}`} class="btn-solid">Ara · {company.phoneDisplay}</a>
+        </div>
+        <div data-world-services class="mt-5 hidden text-sm md:block"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Arama motorları ve JS'siz ziyaret için içerik -->
+  <div id="icerik-metin" class="relative z-10 mt-[100svh] bg-paper">
+    <div class="container-x py-16 md:py-24">
+      {worlds.map((w) => (
+        <article id={w.key} class="grid gap-4 border-t border-line py-10 md:grid-cols-12">
+          <div class="md:col-span-4"><p class="hud-label text-sea">{w.eyebrow}</p><h2 class="mt-2 text-2xl font-medium text-ink">{w.headline}</h2></div>
+          <div class="md:col-span-8">
+            <p class="text-ink-2">{w.intro}</p>
+            <ul class="mt-4 grid gap-3 md:grid-cols-3">{w.steps.map((s) => <li><p class="font-medium text-ink">{s.title}</p><p class="mt-1 text-sm text-ink-3">{s.text}</p></li>)}</ul>
+            <p class="mt-4 text-sm">{w.services.map((s) => <a class="mr-4 text-ink-2 underline-offset-4 hover:text-ink hover:underline" href={s.href}>{s.name}</a>)}</p>
+          </div>
+        </article>
+      ))}
+      <div class="border-t border-line py-10">
+        <p class="hud-label text-sea">Bölgeler</p>
+        <p class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+          {['cesme','alacati','ilica','urla','gulbahce','karaburun','seferihisar','guzelbahce'].map((s) => <a class="text-ink-2 hover:text-ink" href={`/${s}-vinc-kiralama`}>{ {cesme:'Çeşme',alacati:'Alaçatı',ilica:'Ilıca',urla:'Urla',gulbahce:'Gülbahçe',karaburun:'Karaburun',seferihisar:'Seferihisar',guzelbahce:'Güzelbahçe'}[s] } vinç kiralama</a>)}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import { initUI } from '@/scripts/stage/ui';
+    initUI();
+  </script>
 </Base>
