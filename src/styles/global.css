@@ -10,17 +10,20 @@
 
 @theme {
   --font-sans: "Inter Tight", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  /* Açık, yumuşak palet: fildişi/kum zemin, sıcak kömür (siyah değil) metin, bal sarısı vurgu */
-  --color-paper: #fbf8f1;
-  --color-paper-2: #f4eee1;
-  --color-paper-3: #ebe3d0;
-  --color-line: #e3dbc8;
-  --color-ink: #2c2820;
-  --color-ink-2: #5b5446;
-  --color-ink-3: #6a6152;
-  --color-crane: #e3a92f;
-  --color-crane-2: #f0be50;
-  --color-crane-deep: #8f620c;
+  /* Palet kamyondan: Iveco mavisi + tabela sarısı; zemin Çeşme gökyüzü ve kum, siyah yok */
+  --color-paper: #f5f8fc;
+  --color-paper-2: #f7f2e8;
+  --color-paper-3: #ece5d6;
+  --color-sky: #e3eef8;
+  --color-sky-2: #c9dcee;
+  --color-line: #d7dfe9;
+  --color-ink: #172033;
+  --color-ink-2: #45506a;
+  --color-ink-3: #5e6981;
+  --color-sea: #1d3f9f;
+  --color-sea-2: #2b56c9;
+  --color-crane: #f4c430;
+  --color-crane-2: #ffd75a;
   --color-alert: #d26a3e;
   --color-safe: #25d366;
   --color-safe-deep: #117a40;
@@ -42,14 +45,14 @@
     font-feature-settings: "ss01", "cv11";
   }
   ::selection { background: var(--color-crane-2); color: var(--color-ink); }
-  :focus-visible { outline: 2px solid var(--color-crane-deep); outline-offset: 3px; }
+  :focus-visible { outline: 2px solid var(--color-sea); outline-offset: 3px; }
   h1, h2, h3 { text-wrap: balance; letter-spacing: -0.02em; }
   p { text-wrap: pretty; }
 }
 
 @utility hazard-stripe {
   /* İnce pirinç hairline: eski şantiye şeridinin yerini aldı */
-  background-image: linear-gradient(90deg, transparent, var(--color-crane) 30%, var(--color-crane) 70%, transparent);
+  background-image: linear-gradient(90deg, transparent, var(--color-sea) 30%, var(--color-sea) 70%, transparent);
 }
 
 @utility grid-lines {
@@ -84,10 +87,14 @@
 .js-motion [data-reveal] { opacity: 0; transform: translateY(18px); will-change: transform, opacity; }
 .js-motion [data-reveal].is-in { opacity: 1; transform: none; transition: opacity .6s ease, transform .6s ease; }
 
-/* Hero: JS + hareket varsa bom kapalı başlar (GSAP aynı değerlerle devralır); JS yoksa açık statik */
-#hero [data-layer], #hero [data-cable-wrap], #hero [data-cable] { will-change: transform; }
-.js-motion #hero [data-layer="boom2"] { transform: translate(11.4%, 21.8%); }
-.js-motion #hero [data-layer="boom3"],
-.js-motion #hero [data-layer="hook"],
-.js-motion #hero [data-cable-wrap] { transform: translate(22.1%, 42.2%); }
-.js-motion #hero [data-hero-cta] { opacity: 0; }
+/* Yol hero'su: JS yoksa duraklar yatay kaydırılabilir şerit olarak kalır (scroll-snap) */
+#hero [data-track] { display: flex; align-items: flex-start; gap: var(--stop-gap); padding-inline-start: var(--track-pad); }
+html:not(.js-motion) #hero [data-track] { overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding-inline-end: var(--track-pad); scrollbar-width: none; }
+html:not(.js-motion) #hero [data-stop] { scroll-snap-align: center; }
+#hero [data-stop] { flex: 0 0 var(--stop-w); width: var(--stop-w); }
+#hero [data-track], #hero [data-truck], #hero [data-wheel], #hero [data-road-line] { will-change: transform; }
+#hero [data-wheel] { transform-origin: 50% 50%; }
+#hero [data-road-line] {
+  background-image: repeating-linear-gradient(90deg, var(--color-paper) 0 44px, transparent 44px 96px);
+  background-size: 96px 100%;
+}

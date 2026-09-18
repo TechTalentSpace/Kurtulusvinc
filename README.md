@@ -23,9 +23,9 @@ src/
   data/company.json        # isim, telefon, siteUrl, hizmetler, adres (placeholder)
   data/districts.json      # 8 ilçe: slug, başlık, açıklama, benzersiz içerik, iş tipleri
   data/faq.json            # SSS (FAQPage şeması buradan üretilir)
-  assets/crane/*.png           # arka plansız gerçek vinç katmanları (aynı tuval)
-  assets/isler/                # iş fotoğrafları: buraya atılan her görsel galeride listelenir
-  components/CraneHero.astro   # pinned katmanlı hero + GSAP yükleyici
+  assets/truck/*.png           # arka plansız Kurtuluş kamyonu + 5 tekerlek dairesi
+  assets/isler/*.webp          # firma iş fotoğrafları: hero durakları + galeri (buraya atılan her görsel galeride listelenir)
+  components/RoadHero.astro    # "Yol" hero'su: pinned, duraklar + kamyon + tekerlekler
   components/RegionMap.astro   # stilize yarımada haritası, ilçeler scroll'da yanar
   components/StickyCta.astro   # alt sabit [Ara] [WhatsApp] çubuğu
   components/Seo.astro         # title/description/canonical/OG/Twitter
@@ -37,31 +37,30 @@ src/
   pages/iletisim.astro
   pages/sss.astro
   pages/404.astro
-  scripts/hero.ts          # ScrollTrigger timeline, reduced-motion dalı
-  scripts/hero-assets.ts   # hero katman görsel ayarları (genişlik/kalite/sizes)
+  scripts/road.ts          # ScrollTrigger yol timeline'ı (track, tekerlek, yol çizgisi, bulut)
   styles/global.css        # Tailwind tema, font-face, utility'ler
 public/
   fonts/inter-tight-var.woff2  # Inter Tight değişken, wght 400–800, Türkçe alt küme (26 KB)
   _headers / vercel.json / netlify.toml
   robots.txt, favicon.svg, logo.svg, og-default.png, site.webmanifest
-scripts/og.mjs             # OG görseli üretici (vinç kompoziti + metin, sharp)
-scripts/crane-layers.py    # fotoğraftan arka plansız katmanlar (rembg), eklem kesimi, renk
+scripts/og.mjs             # OG görseli üretici (kamyon + metin, sharp)
+scripts/truck-layers.py    # kamyon fotoğrafından arka plansız araç + tekerlek daireleri (rembg)
 ```
 
 ## Tasarım dili
 
-Açık ve yumuşak: fildişi zemin (`#FBF8F1`), kum bantlar, beyaz kartlar, sıcak kömür metin (`#2C2820`, siyah değil), bal sarısı vurgu (`#E3A92F`) ve açık zeminde okunur koyu bal (`#8F620C`) vurgu metni. Mobil birincil.
+Palet kamyondan: Iveco mavisi (`#1D3F9F`) ve tabela sarısı (`#F4C430`, yalnızca butonlar); zemin Çeşme gökyüzü ve kum, kartlar beyaz, metin lacivert-kömür (siyah değil). Mobil birincil.
 
-## Hero
+## Hero — "Yol"
 
-- Arka plansız gerçek vinç (Pexels #29502190, atıf gerekmez), dört şeffaf katman: şasi+taban bom, 2. bölüm, 3. bölüm+baş, kanca.
-- Scroll'da bölümler bom ekseninde sırayla uzar, kanca iner ve "Hemen Ara" CTA'sını kaldırır. Yalnızca transform/opacity.
-- `prefers-reduced-motion` → bom açık, statik.
-- **Kendi vincinizle değiştirmek için:** bom açık, yandan/çapraz, düz arka planlı net bir fotoğraf; `pip install rembg onnxruntime pillow numpy`, sonra `python3 scripts/crane-layers.py foto.jpg`. Script'teki eksen noktaları (`P1`, `P2`), eklem y'leri ve kanca kutusu yeni fotoğrafa göre güncellenir; çıktıdaki yüzdeler `hero.ts` (`R2`, `R3`) ve `global.css` (`.js-motion` kapalı hal) içine yazılır. Sonra `pnpm og`.
+- Kurtuluş'un mavi Iveco'su (arka planı kaldırılmış gerçek fotoğraf) yolun üstünde durur; scroll ile duraklar sola akar, tekerlekler mesafeye göre döner, yol çizgisi kayar, kamyon hafif sallanır.
+- 5 durak = 5 gerçek iş fotoğrafı (marina, şantiye, tersane, bağ, villa) + son durak "Neredesiniz?" ile Ara / Konum gönder.
+- JS yoksa veya `prefers-reduced-motion`: pin yok, duraklar parmakla kaydırılır (scroll-snap).
+- **Kamyon fotoğrafını değiştirmek için:** yandan, düz arka planlı net bir fotoğraf; `pip install rembg onnxruntime pillow numpy`, `python3 scripts/truck-layers.py foto.jpg`; script'teki `CROP` ve `WHEELS` (tekerlek merkez/yarıçap) yeni fotoğrafa göre güncellenir, çıktıdaki yüzdeler `RoadHero.astro > WHEELS` listesine yazılır. Sonra `pnpm og`.
 
 ## İş fotoğrafları
 
-`src/assets/isler/` içine `jpg/png/webp` atın; ana sayfadaki "Sahadan" galerisi otomatik dolar. Dosya adı alt metin olur (`alacati-cati-montaji.jpg` → "alacati cati montaji"); Türkçe karakter kullanılabilir. Klasör boşken yer tutucu grid görünür.
+`src/assets/isler/` içine `jpg/png/webp` atın; ana sayfadaki "Yolda çektiklerimiz" galerisi otomatik dolar. Hero durakları `RoadHero.astro` içindeki `stops` listesinden (dosya adıyla) seçilir. Dosya adı alt metin olur (`alacati-cati-montaji.jpg` → "alacati cati montaji"); Türkçe karakter kullanılabilir. Klasör boşken yer tutucu grid görünür.
 
 ## Sosyal bağlantılar
 
@@ -77,10 +76,10 @@ Açık ve yumuşak: fildişi zemin (`#FBF8F1`), kum bantlar, beyaz kartlar, sıc
 
 | Sayfa | Perf | SEO | A11y | LCP | CLS |
 |---|---|---|---|---|---|
-| `/` | 99 | 100 | 100 | 2.3 s | 0 |
+| `/` | 97 | 100 | 100 | 2.6 s | 0 |
 | `/alacati-vinc-kiralama` | 100 | 100 | 100 | 1.2 s | 0 |
 
-JS: tek bundle 116 KB / **46 KB gzip** (GSAP core + ScrollTrigger + hero). Font 26 KB. Hero katmanları WebP, mobilde toplam ~115 KB (carrier 69 KB LCP). CSS inline.
+JS: tek bundle 116 KB / **46 KB gzip** (GSAP core + ScrollTrigger + yol). Font 26 KB. Kamyon WebP mobilde 110 KB, ilk durak fotoğrafı ~35 KB, diğer duraklar lazy. CSS inline. LCP simülasyonda hedefin biraz üstünde (metin + font); gerçek cihazda daha iyi.
 
 ## TODO — firma tarafından doğrulanacaklar
 
@@ -90,11 +89,11 @@ Uydurma bilgi yazılmadı; aşağıdakiler koda `TODO:` olarak işaretli.
 2. **Çalışma saatleri** — `company.json > openingHours`; JSON-LD `openingHoursSpecification` eklenecek, iletişim sayfasındaki "TODO: çalışma saatleri" metni.
 3. **Hizmetler ve tonajlar** — `company.json > services[].capacityNote` ve `bullets` içindeki "TODO" satırları (makine parkı, tonaj, bom uzunluğu, sepet yüksekliği, hiyap kapasitesi, tekne kaldırma kapasitesi).
 4. **Neden biz — 4. madde** — 7/24 hizmet, sigorta ve belge iddiaları teyit edilince `index.astro > why[3]`.
-5. **İş fotoğrafları** — `src/assets/isler/` klasörüne atılınca otomatik galeri. Facebook/Instagram giriş duvarı nedeniyle oradan çekilemedi.
+5. **İş fotoğrafları** — 5 firma fotoğrafı eklendi; yenileri `src/assets/isler/` klasörüne atılınca galeriye girer.
 6. **Sosyal medya / Google Maps** — `company.json > social`; JSON-LD `sameAs`.
 7. **E-posta** — `company.json > email` boş.
 8. **Form** — Vercel'e deploy edilirse Formspree endpoint'i (`index.astro`, `iletisim.astro`).
 9. **Alan adı** — `kurtulusvinc.com` varsayım; `company.json > siteUrl`.
 10. **Referans / yorum** — sitede yok; gerçek müşteri yorumu gelince eklenecek bölüm.
-11. **Hero vinci** — şu an Pexels stok fotoğrafı (ACE 16XW, altın tona kaydırıldı). Firmanın kendi vinciyle değiştirilecek (yöntem yukarıda).
+11. **Hero kamyonu** — firmanın zeytin ağaçlı Iveco fotoğrafından kesildi; daha temiz/yüksek çözünürlüklü bir yandan fotoğraf gelirse `truck-layers.py` ile yenilenir.
 12. **Instagram** — hesap URL'si `company.json > social.instagram`; Facebook grubu arama sonucundan eklendi, doğrulanmalı.

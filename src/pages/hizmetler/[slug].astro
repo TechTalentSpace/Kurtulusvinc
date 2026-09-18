@@ -18,7 +18,7 @@ const others = company.services.filter((s) => s.slug !== service.slug);
 
   <section class="grid-lines border-b border-line pt-28 pb-12 md:pt-36 md:pb-16">
     <div class="container-x">
-      <nav aria-label="Breadcrumb" class="mb-4 text-xs text-ink-3"><a href="/" class="hover:text-crane-deep">Ana Sayfa</a> / <a href="/#hizmetler" class="hover:text-crane-deep">Hizmetler</a> / <span class="text-ink-2">{service.short}</span></nav>
+      <nav aria-label="Breadcrumb" class="mb-4 text-xs text-ink-3"><a href="/" class="hover:text-sea">Ana Sayfa</a> / <a href="/#hizmetler" class="hover:text-sea">Hizmetler</a> / <span class="text-ink-2">{service.short}</span></nav>
       <h1 class="text-4xl font-semibold tracking-tight text-ink md:text-5xl">{service.name}</h1>
       <p class="mt-4 max-w-2xl text-lg text-ink-2">{service.summary}</p>
       <div class="mt-6 flex flex-wrap gap-3">
@@ -48,7 +48,7 @@ const others = company.services.filter((s) => s.slug !== service.slug);
     <div class="container-x">
       <h2 class="text-2xl font-semibold text-ink">Bu hizmeti verdiğimiz ilçeler</h2>
       <ul class="mt-4 flex flex-wrap gap-2">
-        {districts.map((d) => <li><a href={`/${d.slug}-vinc-kiralama`} class="tap inline-flex items-center rounded-full border border-line px-4 text-sm font-semibold text-ink-2 hover:border-crane hover:text-crane-deep">{d.name}</a></li>)}
+        {districts.map((d) => <li><a href={`/${d.slug}-vinc-kiralama`} class="tap inline-flex items-center rounded-full border border-line px-4 text-sm font-semibold text-ink-2 hover:border-crane hover:text-sea">{d.name}</a></li>)}
       </ul>
       <h2 class="mt-10 text-2xl font-semibold text-ink">Diğer hizmetler</h2>
       <ul class="mt-4 grid gap-3 sm:grid-cols-3">

@@ -1,17 +1,16 @@
 ---
 import Base from '@/layouts/Base.astro';
 import JsonLd from '@/components/JsonLd.astro';
-import CraneHero from '@/components/CraneHero.astro';
+import RoadHero from '@/components/RoadHero.astro';
 import RegionMap from '@/components/RegionMap.astro';
 import company from '@/data/company.json';
 import districts from '@/data/districts.json';
 import faq from '@/data/faq.json';
 import { getImage, Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
-import carrier from '@/assets/crane/carrier.png';
-import { HERO_WIDTHS, HERO_SIZES, HERO_QUALITY } from '@/scripts/hero-assets';
-// LCP: hero'nun en buyuk katmanini head'den preload et
-const carrierImg = await getImage({ src: carrier, widths: HERO_WIDTHS, quality: HERO_QUALITY, format: 'webp' });
+import truck from '@/assets/truck/truck.png';
+// LCP: kamyon katmanini head'den preload et
+const truckImg = await getImage({ src: truck, widths: [560, 800, 1230], quality: 68, format: 'webp' });
 
 // Is fotograflari: src/assets/isler/ klasorune atilan her gorsel otomatik listelenir (dosya adi alt metin olur)
 const islerGlob = import.meta.glob('../assets/isler/*.{jpg,jpeg,png,webp}', { eager: true }) as Record<string, { default: ImageMetadata }>;
@@ -35,18 +34,18 @@ const why = [
 ---
 <Base title={title} description={description} path="/">
   <Fragment slot="head">
-    <link rel="preload" as="image" imagesrcset={carrierImg.srcSet.attribute} imagesizes={HERO_SIZES} fetchpriority="high" />
+    <link rel="preload" as="image" imagesrcset={truckImg.srcSet.attribute} imagesizes="(min-width: 768px) 44vw, 96vw" fetchpriority="high" />
     <JsonLd kind="home" path="/" />
   </Fragment>
 
-  <CraneHero />
+  <RoadHero />
 
   <!-- HİZMETLER -->
   <section id="hizmetler" class="container-x scroll-mt-20 py-16 md:py-24">
     <div class="mb-8 flex items-end justify-between gap-4" data-reveal>
       <div>
-        <p class="text-xs font-bold uppercase tracking-[0.2em] text-crane-deep">Hizmetler</p>
-        <h2 class="mt-2 text-3xl font-semibold tracking-tight text-ink md:text-4xl">Ne için geliyoruz</h2>
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-sea">Hizmetler</p>
+        <h2 class="mt-2 text-3xl font-semibold tracking-tight text-ink md:text-4xl">Ne taşırız, ne kaldırırız</h2>
       </div>
     </div>
     <ul class="grid gap-4 sm:grid-cols-2">
@@ -54,10 +53,10 @@ const why = [
         <li data-reveal>
           <a href={`/hizmetler/${s.slug}`} class="group relative flex h-full flex-col rounded-2xl border border-line bg-white p-6 shadow-[0_10px_30px_-18px_rgba(44,40,32,.25)] transition-colors hover:border-crane">
             <span class="hazard-stripe absolute inset-x-6 top-0 h-px opacity-0 transition-opacity group-hover:opacity-100" aria-hidden="true"></span>
-            <span class="mb-4 font-mono text-[11px] font-semibold tracking-[0.12em] text-crane-deep">0{i + 1}</span>
+            <span class="mb-4 inline-flex h-9 w-9 items-center justify-center rounded-full bg-sky text-sm font-bold text-sea">{i + 1}</span>
             <h3 class="text-xl font-semibold text-ink">{s.name}</h3>
             <p class="mt-2 text-sm text-ink-3">{s.tagline}</p>
-            <span class="mt-auto pt-6 text-sm font-bold text-crane-deep">Detay →</span>
+            <span class="mt-auto pt-6 text-sm font-bold text-sea">Detay →</span>
           </a>
         </li>
       ))}
@@ -68,12 +67,12 @@ const why = [
   <section id="bolge" class="scroll-mt-20 border-y border-line bg-paper-2 py-16 md:py-24">
     <div class="container-x grid gap-10 md:grid-cols-12 md:items-center">
       <div class="md:col-span-5" data-reveal>
-        <p class="text-xs font-bold uppercase tracking-[0.2em] text-crane-deep">Çalışma bölgesi</p>
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-sea">Çalışma bölgesi</p>
         <h2 class="mt-2 text-3xl font-semibold tracking-tight text-ink md:text-4xl">Yarımadanın her noktasına</h2>
         <p class="mt-4 text-ink-2">Çeşme merkezden çıkıp Karaburun'un ucuna, Seferihisar'ın sahiline kadar gidiyoruz. İlçenizi seçin, o bölgeye özgü işleri görün.</p>
         <ul class="mt-6 flex flex-wrap gap-2">
           {districts.map((d) => (
-            <li><a href={`/${d.slug}-vinc-kiralama`} class="tap inline-flex items-center rounded-full border border-line px-4 text-sm font-semibold text-ink-2 hover:border-crane hover:text-crane-deep">{d.name}</a></li>
+            <li><a href={`/${d.slug}-vinc-kiralama`} class="tap inline-flex items-center rounded-full border border-line px-4 text-sm font-semibold text-ink-2 hover:border-crane hover:text-sea">{d.name}</a></li>
           ))}
         </ul>
         <p class="mt-4 text-sm text-ink-3">Ayrıca: Dalyan, Mordoğan ve İzmir merkez.</p>
@@ -87,13 +86,13 @@ const why = [
   <!-- NEDEN BİZ -->
   <section class="container-x py-16 md:py-24">
     <div data-reveal>
-      <p class="text-xs font-bold uppercase tracking-[0.2em] text-crane-deep">Neden biz</p>
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-sea">Neden biz</p>
       <h2 class="mt-2 text-3xl font-semibold tracking-tight text-ink md:text-4xl">Neden Kurtuluş Vinç</h2>
     </div>
     <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {why.map((w) => (
         <li class="rounded-2xl border border-line bg-white p-6" data-reveal>
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#8f620c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={w.icon} /></svg>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1d3f9f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={w.icon} /></svg>
           <h3 class="mt-4 font-bold text-ink">{w.t}</h3>
           <p class="mt-1 text-sm text-ink-3">{w.d}</p>
         </li>
@@ -105,8 +104,8 @@ const why = [
   <section class="border-y border-line bg-paper-2 py-16 md:py-24">
     <div class="container-x">
       <div data-reveal>
-        <p class="text-xs font-bold uppercase tracking-[0.2em] text-crane-deep">Sahadan</p>
-        <h2 class="mt-2 text-3xl font-semibold tracking-tight text-ink md:text-4xl">İş fotoğrafları</h2>
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-sea">Sahadan</p>
+        <h2 class="mt-2 text-3xl font-semibold tracking-tight text-ink md:text-4xl">Yolda çektiklerimiz</h2>
         {isler.length === 0 && <p class="mt-2 text-sm text-ink-3">Fotoğraflar yakında. <!-- TODO: gerçek fotoğraflar src/assets/isler/ klasörüne --></p>}
       </div>
       {isler.length > 0 ? (
@@ -133,7 +132,7 @@ const why = [
   <!-- SSS -->
   <section class="container-x py-16 md:py-24">
     <div data-reveal>
-      <p class="text-xs font-bold uppercase tracking-[0.2em] text-crane-deep">Sık sorulanlar</p>
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-sea">Sık sorulanlar</p>
       <h2 class="mt-2 text-3xl font-semibold tracking-tight text-ink md:text-4xl">Aklınızdakiler</h2>
     </div>
     <div class="mt-8 divide-y divide-line border-y border-line">
@@ -141,20 +140,20 @@ const why = [
         <details class="group py-4" data-reveal>
           <summary class="tap flex cursor-pointer list-none items-center justify-between gap-4 font-bold text-ink [&::-webkit-details-marker]:hidden">
             {f.q}
-            <span class="text-crane-deep transition-transform group-open:rotate-45" aria-hidden="true">+</span>
+            <span class="text-sea transition-transform group-open:rotate-45" aria-hidden="true">+</span>
           </summary>
           <p class="mt-3 text-ink-2">{f.a}</p>
         </details>
       ))}
     </div>
-    <a href="/sss" class="tap mt-6 inline-flex items-center font-bold text-crane-deep">Tüm sorular →</a>
+    <a href="/sss" class="tap mt-6 inline-flex items-center font-bold text-sea">Tüm sorular →</a>
   </section>
 
   <!-- İLETİŞİM -->
   <section id="iletisim" class="border-t border-line bg-paper-2 py-16 md:py-24">
     <div class="container-x grid gap-10 md:grid-cols-2">
       <div data-reveal>
-        <p class="text-xs font-bold uppercase tracking-[0.2em] text-crane-deep">İletişim</p>
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-sea">İletişim</p>
         <h2 class="mt-2 text-3xl font-semibold tracking-tight text-ink md:text-4xl">Konumu söyleyin, yola çıkalım</h2>
         <p class="mt-4 text-ink-2">En hızlı yol telefon. WhatsApp'tan konum ve fotoğraf gönderirseniz keşif kolaylaşır.</p>
         <div class="mt-6 flex flex-col gap-3 sm:flex-row">

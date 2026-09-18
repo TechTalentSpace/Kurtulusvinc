@@ -29,13 +29,12 @@ Kullanma: React, Three.js/R3F, Lottie, Framer Motion, jQuery, herhangi bir UI ki
 
 ## Tasarım dili
 
-- **Açık, yumuşak, sarıyla uyumlu palet** (siyah ve koyu zemin YOK; grafit sürüm kullanıcı kararıyla kaldırıldı): fildişi zemin `#FBF8F1`, kum bantlar `#F4EEE1` / `#EBE3D0`, çizgi `#E3DBC8`, kartlar beyaz. Metin sıcak kömür `#2C2820` (siyah değil), ikincil `#5B5446`, üçüncül `#7D7464`. Vurgu **bal sarısı** `#E3A92F` (hover `#F0BE50`) yalnızca buton/çizgi/nokta olarak; açık zeminde **vurgu metni** için koyu bal `#8F620C` (kontrast ≥ 4.5). Uyarı `#D26A3E`, WhatsApp yeşili `#25D366`.
-- Vinç görseli **gerçek fotoğraf**, çizim değil; **arka plansız** tek vinç. Şu an Pexels #29502190 (ACE 16XW, Pexels lisansı, atıf gerekmez); `scripts/crane-layers.py` ile arka planı kaldırılıp turuncu→altın kaydırıldı ve bom eklemlerinden katmanlara ayrıldı. Firmanın kendi vinç fotoğrafı gelince aynı script ile yeniden üretilir.
-- İş fotoğrafları: `src/assets/isler/` klasörüne atılan her görsel ana sayfadaki galeride otomatik listelenir (dosya adı alt metin olur). Klasör boşken yer tutucu grid görünür.
-- Mobil-first: önce 390px, sonra 768, 1280. **Masaüstü ikincil**; kullanıcı çoğunlukla yolda, telefondan, acil durumda giriyor.
-- Her ekranda alt sabit CTA çubuğu: **[Ara] [WhatsApp]** — 56px, `env(safe-area-inset-bottom)`; Ara bal sarısı, WhatsApp yeşil, ikisinde de koyu metin.
-- Dokunma hedefleri ≥ 44px. Metin kontrastı WCAG AA; açık zeminde `text-crane` (bal sarısı) metin olarak KULLANMA, `text-crane-deep` kullan.
-- Sosyal bağlantılar `company.json > social`'dan gelir; boş alan gösterilmez. Footer, iletişim ve JSON-LD `sameAs` aynı kaynağı okur.
+- **Palet kamyondan gelir** (kullanıcı kararı: siyah/koyu zemin yok, sarı-siyah şantiye yok, grafit yok): Iveco mavisi `#1D3F9F` (vurgu, başlık vurgusu, kicker), tabela sarısı `#F4C430` (yalnızca butonlar; hover `#FFD75A`), zemin Çeşme gökyüzü `#E3EEF8`/`#C9DCEE` ve kum `#F7F2E8`, sayfa zemini `#F5F8FC`, kartlar beyaz, çizgi `#D7DFE9`. Metin lacivert-kömür `#172033` (siyah değil), ikincil `#45506A`, üçüncül `#5E6981`. Yol şeridi `#5E6981`. WhatsApp yeşili `#25D366`, koyu yeşil metin `#117A40`.
+- Görseller **gerçek**: firmanın kendi fotoğrafları (`src/assets/isler/`), hero'da firmanın mavi Iveco çekicisi arka planı kaldırılmış (`src/assets/truck/`, `scripts/truck-layers.py`). Çizim/ikon vinç yok.
+- Ton: Çeşme/Alaçatı yazlık; ferah, güneşli, sakin. Sıradışılık hero'da (yol hikâyesi), sadelik geri kalanda.
+- Mobil-first; masaüstü ikincil. Alt sabit CTA çubuğu: **[Ara] [WhatsApp]** — sarı / yeşil, koyu metin, 56px, safe-area.
+- Dokunma hedefleri ≥ 44px. Kontrast AA: açık zeminde sarı metin KULLANMA; vurgu metni `text-sea`.
+- Sosyal bağlantılar `company.json > social`'dan; boş alan gösterilmez.
 
 ## Sayfa yapısı
 
@@ -51,31 +50,30 @@ Kullanma: React, Three.js/R3F, Lottie, Framer Motion, jQuery, herhangi bir UI ki
 
 ## Ana sayfa akışı
 
-1. **Hero — "Bom Uzuyor, Hizmet Açılıyor"** (aşağıda ayrı bölüm)
-2. Hizmetler (4 kart, her biri hizmet sayfasına gider)
-3. Çalışma bölgesi — Çeşme yarımadasının stilize SVG haritası; ilçeler scroll'da sırayla yanar, her biri ilçe sayfasına link
-4. Neden biz — 3–4 somut madde (hızlı ulaşım, sigortalı operatör, 7/24) — doğrulanmamış iddia yazma, `TODO` bırak
-5. İş fotoğrafları — placeholder grid, `TODO: gerçek fotoğraflar`
-6. SSS (5–6 soru, FAQPage schema ile)
-7. İletişim — tıkla-ara, WhatsApp, kısa form (Netlify Forms veya Formspree)
+1. **Hero — "Yol"** (aşağıda ayrı bölüm)
+2. Hizmetler (4 kart, her biri hizmet sayfasına gider) — "Ne taşırız, ne kaldırırız"
+3. Çalışma bölgesi — stilize yarımada SVG haritası; ilçeler scroll'da sırayla yanar
+4. Neden biz — 3–4 somut madde; doğrulanmamış iddia yazma, `TODO` bırak
+5. Yolda çektiklerimiz — `src/assets/isler/` otomatik galeri (firma fotoğrafları)
+6. SSS (FAQPage schema)
+7. İletişim — tıkla-ara, WhatsApp, kısa form
 
-## Hero animasyonu spesifikasyonu
+## Hero animasyonu spesifikasyonu — "Yol"
 
-Konsept: Fildişi zemin üzerinde arka plansız **gerçek vinç**. Sayfa açıldığında bom kapalı; scroll ettikçe teleskopik bölümler gerçek eklem yerlerinden bom ekseninde uzar (2 kademe: 2. bölüm, sonra 3. bölüm + baş). Bom tam açıldığında kanca aşağı iner ve "Hemen Ara" CTA'sını kaldırır (`y: 40 → 0`). Başlık üstte durur, bom yaklaşmadan yukarı süzülüp söner.
+Konsept: Kurtuluş'un mavi Iveco'su ("Italiano Stallone") ekranın altında, yolun üstünde durur. Scroll ettikçe kamyon değil dünya hareket eder: durak şeridi sola akar, tekerlekler alınan mesafeye göre gerçekten döner, yol çizgisi kayar, kamyon hafif sallanır, bulutlar paralaks yapar. Her durak gerçek bir iş fotoğrafı + 2 satır hikâye (Marina → Şantiye → Tersane → Bağ → Villa). Kamyon her durakta "mola" verir (hold), sonra devam eder. Son durak: "Neredesiniz?" + Ara / Konum gönder.
 
 Uygulama:
-- Varlıklar: `src/assets/crane/{carrier,boom2,boom3,hook}.png` — aynı 1100×2080 tuval, şeffaf; `astro:assets` `<Image>` ile WebP (480/720/1000, kalite 72; ayarlar `src/scripts/hero-assets.ts`). `scripts/crane-layers.py` üretir (rembg + eksen boyunca dik kesim + renk).
-- `src/components/CraneHero.astro`: dört katman `absolute inset-0 object-contain` üst üste (kanca en altta, carrier en üstte). Kablo: `[data-cable-wrap]` (kanca ile taşınır) içinde `[data-cable]` (scaleY). CTA tuvalin içinde, kancanın altında.
-- `src/scripts/hero.ts`: GSAP ScrollTrigger pin (`start: 'top top'`, mobil `+=220%`, masaüstü `+=260%`, `scrub: 0.6`). Geri çekilme değerleri tuval yüzdesi (`R2`, `R3`, pozitif = tabana doğru). Zaman çizelgesi: 0–0.4 boom2, 0.38–0.76 boom3, 0.12–0.37 metin çekilir, 0.78–1.0 kanca iner + CTA.
-- Kapalı başlangıç `global.css`'te `.js-motion` altında CSS transform ile (flaş yok); GSAP aynı değerleri `x:0,y:0` ile devralır. JS yoksa bom açık statik.
-- Sadece `transform` ve `opacity`; `will-change: transform` katmanlarda.
-- **Reduced motion**: ScrollTrigger kurulmaz; bom açık, CTA görünür.
-- **LCP**: carrier katmanı `index.astro` head'inden `<link rel="preload" as="image" imagesrcset>` ile preload edilir; CSS inline (`inlineStylesheets: 'always'`). Pinned bölüm `100svh`. Scroll ipucu ilk scroll'da kaybolur.
+- `src/components/RoadHero.astro`: `#hero` `100svh` pinned. Katmanlar: gökyüzü gradyanı + güneş + bulutlar (`[data-cloud]`), durak şeridi `[data-track]` (flex, `--stop-w`, `--stop-gap`, `--track-pad` ile ilk durak merkezde), yol `[data-road]` + kayan çizgi `[data-road-line]` (repeating-gradient, periyot 96px), kamyon `[data-truck]` (kesilmiş PNG → WebP) + 5 tekerlek `[data-wheel]` (daire PNG, yüzde konumlu, `translate(-50%,-50%)`).
+- `src/scripts/road.ts`: GSAP ScrollTrigger pin (`start: 'top top'`, mobil `+=480%`, masaüstü `+=420%`, `scrub: 0.8`). Timeline: her durak için `state.x → -(durak merkezi - ekran merkezi)` (`power2.inOut`, süre 1) + 0.45 mola. `apply()` tek yerden: track `x`, tekerlek `rotation = mesafe / (π·çap) · 360`, yol çizgisi `x = -(mesafe % 96)`, kamyon `y = sin(mesafe/11)·1.6`, bulutlar `x = -mesafe·k`. Girişte kamyon sağdan gelir (`xPercent 120 → 0`, 1.8s) ve tekerlekler döner (`state.entry`).
+- Yalnızca `transform`; `will-change: transform` şerit, kamyon, tekerlek, yol çizgisinde.
+- **JS yoksa / reduced motion**: hero pinlenmez; şerit `overflow-x: auto` + `scroll-snap` ile parmakla kaydırılır (`html:not(.js-motion)` kuralları `global.css`'te).
+- **LCP**: kamyon görseli `index.astro` head'inden `imagesrcset` ile preload; durak fotoğrafları `loading="eager"` (pinned bölümde hepsi görünür olacak), 420/640/900 genişlik. CSS inline.
+- Kamyon fotoğrafı değişirse: `python3 scripts/truck-layers.py foto.jpg` → `CROP`/`WHEELS` güncellenir, çıktı yüzdeleri `RoadHero.astro > WHEELS`'e yazılır.
 
 ## SEO gereksinimleri
 
 - Her sayfada benzersiz `<title>` (≤ 60 karakter) ve `<meta name="description">` (≤ 155). Şablon: `{İlçe} Vinç Kiralama | Kurtuluş Vinç — 0532 466 38 74`.
-- `src/components/Seo.astro`: canonical, Open Graph, Twitter card, `og:image` (1200×630, gerçek vinç kompoziti + başlık; `pnpm og`).
+- `src/components/Seo.astro`: canonical, Open Graph, Twitter card, `og:image` (1200×630, kamyon + başlık; `pnpm og`).
 - JSON-LD (`src/components/JsonLd.astro`):
   - Ana sayfa: `HomeAndConstructionBusiness` + `Organization` + `WebSite`; `telephone`, `areaServed` (ilçe listesi), `openingHoursSpecification` (`TODO`), `address` (`addressLocality: Çeşme`, `addressRegion: İzmir`, `addressCountry: TR`; sokak adresi doğrulanınca eklenecek).
   - Hizmet sayfaları: `Service` + `provider`.
@@ -91,7 +89,7 @@ Uygulama:
 - Performans ≥ 90, SEO 100, Erişilebilirlik ≥ 95.
 - LCP ≤ 2,0 s (hedef), kesin sınır 2,5 s. CLS < 0,05. INP < 200 ms.
 - Toplam JS ≤ 80 KB gzip (GSAP core + ScrollTrigger ≈ 35 KB dahil). Başka kütüphane eklemeden önce sor.
-- Tek font dosyası ≤ 60 KB. Hero SVG ≤ 30 KB.
+- Tek font dosyası ≤ 60 KB. Hero kamyon WebP (mobil) ≤ 120 KB.
 - Her sayfa build sonrası `pnpm build && pnpm preview` ile test edilir; Lighthouse CI yapılandırması ekle (`lighthouserc.json`).
 
 ## Dosya yapısı
@@ -101,9 +99,9 @@ src/
   data/company.json        # isim, telefon, siteUrl, hizmetler, sosyal linkler
   data/districts.json      # slug, ad, benzersiz içerik, öne çıkan iş tipleri
   data/faq.json
-  assets/crane/*.png        # arka plansız gerçek vinç katmanları
-  assets/isler/             # iş fotoğrafları (otomatik galeri)
-  components/CraneHero.astro
+  assets/truck/*.png        # arka plansız Kurtuluş kamyonu + 5 tekerlek dairesi
+  assets/isler/*.webp       # firma iş fotoğrafları (hero durakları + galeri)
+  components/RoadHero.astro
   components/StickyCta.astro
   components/RegionMap.astro
   components/Seo.astro
@@ -114,7 +112,7 @@ src/
   pages/[ilce]-vinc-kiralama.astro
   pages/iletisim.astro
   pages/sss.astro
-  scripts/hero.ts          # GSAP timeline, reduced-motion kontrolü
+  scripts/road.ts          # GSAP yol timeline'ı, tekerlek/yol/bulut hesapları
   styles/global.css
 ```
 

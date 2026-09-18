@@ -9,7 +9,7 @@ const description = 'Kurtuluş Vinç ile iletişim: telefon 0532 466 38 74, What
   <Fragment slot="head"><JsonLd kind="contact" path="/iletisim" /></Fragment>
   <section class="grid-lines border-b border-line pt-28 pb-12 md:pt-36">
     <div class="container-x">
-      <p class="text-xs font-bold uppercase tracking-[0.2em] text-crane-deep">İletişim</p>
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-sea">İletişim</p>
       <h1 class="mt-2 text-4xl font-semibold tracking-tight text-ink md:text-5xl">Konumu söyleyin, yola çıkalım</h1>
       <p class="mt-4 max-w-2xl text-lg text-ink-2">En hızlı yol telefon. WhatsApp'tan konum ve fotoğraf gönderirseniz keşif kolaylaşır.</p>
     </div>
@@ -18,10 +18,10 @@ const description = 'Kurtuluş Vinç ile iletişim: telefon 0532 466 38 74, What
     <div>
       <div id="tesekkur" class="mb-6 hidden rounded-xl border border-safe-deep/40 bg-safe/15 p-4 text-sm text-ink">Mesajınız alındı, en kısa sürede dönüş yapacağız.</div>
       <dl class="space-y-5">
-        <div><dt class="text-xs font-bold uppercase tracking-[0.2em] text-ink-3">Telefon</dt><dd><a href={`tel:${company.phoneE164}`} class="tap inline-flex items-center text-2xl font-extrabold text-crane-deep">{company.phoneDisplay}</a></dd></div>
+        <div><dt class="text-xs font-bold uppercase tracking-[0.2em] text-ink-3">Telefon</dt><dd><a href={`tel:${company.phoneE164}`} class="tap inline-flex items-center text-2xl font-extrabold text-sea">{company.phoneDisplay}</a></dd></div>
         <div><dt class="text-xs font-bold uppercase tracking-[0.2em] text-ink-3">WhatsApp</dt><dd><a href={company.whatsapp} target="_blank" rel="noopener" class="tap inline-flex items-center font-bold text-safe-deep">wa.me/905324663874</a></dd></div>
-        {company.social.facebook && <div><dt class="text-xs font-bold uppercase tracking-[0.2em] text-ink-3">Facebook</dt><dd><a href={company.social.facebook} target="_blank" rel="noopener" class="tap inline-flex items-center font-semibold text-ink hover:text-crane-deep">Kurtuluş Vinç Çeşme / Alaçatı</a></dd></div>}
-        {company.social.instagram && <div><dt class="text-xs font-bold uppercase tracking-[0.2em] text-ink-3">Instagram</dt><dd><a href={company.social.instagram} target="_blank" rel="noopener" class="tap inline-flex items-center font-semibold text-ink hover:text-crane-deep">Instagram</a></dd></div>}
+        {company.social.facebook && <div><dt class="text-xs font-bold uppercase tracking-[0.2em] text-ink-3">Facebook</dt><dd><a href={company.social.facebook} target="_blank" rel="noopener" class="tap inline-flex items-center font-semibold text-ink hover:text-sea">Kurtuluş Vinç Çeşme / Alaçatı</a></dd></div>}
+        {company.social.instagram && <div><dt class="text-xs font-bold uppercase tracking-[0.2em] text-ink-3">Instagram</dt><dd><a href={company.social.instagram} target="_blank" rel="noopener" class="tap inline-flex items-center font-semibold text-ink hover:text-sea">Instagram</a></dd></div>}
         <div><dt class="text-xs font-bold uppercase tracking-[0.2em] text-ink-3">Adres</dt><dd class="text-ink-2">{company.areaLabel}<!-- TODO: sokak adresi doğrulanınca ekle --></dd></div>
         <div><dt class="text-xs font-bold uppercase tracking-[0.2em] text-ink-3">Çalışma saatleri</dt><dd class="text-ink-3">{company.openingHours.text}</dd></div>
       </dl>

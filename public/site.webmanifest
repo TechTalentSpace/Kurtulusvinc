@@ -3,8 +3,8 @@
   "short_name": "Kurtuluş Vinç",
   "start_url": "/",
   "display": "browser",
-  "background_color": "#fbf8f1",
-  "theme_color": "#fbf8f1",
+  "background_color": "#e3eef8",
+  "theme_color": "#e3eef8",
   "lang": "tr",
   "icons": [{ "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }]
 }

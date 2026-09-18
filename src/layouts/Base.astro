@@ -35,7 +35,7 @@ const nav = [
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#fbf8f1" />
+    <meta name="theme-color" content="#e3eef8" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
@@ -55,11 +55,11 @@ const nav = [
       <div class="container-x flex h-16 items-center justify-between">
         <a href="/" class="tap flex items-center gap-2.5 font-extrabold tracking-tight text-ink" title="Ana sayfa">
           <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
-            <rect width="32" height="32" rx="8" fill="#e3a92f"/>
-            <path d="M7 24h18M9 24V13l12-6M21 7v17M21 7l4 3" stroke="#2c2820" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            <circle cx="12" cy="17" r="1.6" fill="#2c2820"/>
+            <rect width="32" height="32" rx="8" fill="#1d3f9f"/>
+            <path d="M7 24h18M9 24V13l12-6M21 7v17M21 7l4 3" stroke="#f4c430" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <circle cx="12" cy="17" r="1.6" fill="#f4c430"/>
           </svg>
-          <span class="text-[17px] leading-none tracking-tight">Kurtuluş<span class="text-crane-deep"> Vinç</span></span>
+          <span class="text-[17px] leading-none tracking-tight text-ink">Kurtuluş<span class="text-sea"> Vinç</span></span>
         </a>
         <nav aria-label="Ana menü" class="hidden gap-6 text-sm font-semibold text-ink-2 md:flex">
           {nav.map((n) => <a class="tap inline-flex items-center hover:text-ink" href={n.href}>{n.label}</a>)}
@@ -82,13 +82,13 @@ const nav = [
           <address class="mt-2 not-italic text-sm text-ink-3">
             {company.areaLabel}<br />
             <!-- TODO: sokak adresi doğrulanınca buraya ve company.json'a eklenecek -->
-            <a class="tap inline-flex items-center font-semibold text-ink-2 hover:text-crane-deep" href={`tel:${company.phoneE164}`}>{company.phoneDisplay}</a>
+            <a class="tap inline-flex items-center font-semibold text-ink-2 hover:text-sea" href={`tel:${company.phoneE164}`}>{company.phoneDisplay}</a>
           </address>
         </div>
         <nav aria-label="Hizmetler" class="text-sm">
           <p class="mb-2 font-bold text-ink">Hizmetler</p>
           <ul class="space-y-1">
-            {company.services.map((s) => <li><a class="tap inline-flex items-center text-ink-3 hover:text-crane-deep" href={`/hizmetler/${s.slug}`}>{s.name}</a></li>)}
+            {company.services.map((s) => <li><a class="tap inline-flex items-center text-ink-3 hover:text-sea" href={`/hizmetler/${s.slug}`}>{s.name}</a></li>)}
           </ul>
         </nav>
         <nav aria-label="Bölgeler" class="text-sm">
@@ -96,14 +96,14 @@ const nav = [
           <ul class="grid grid-cols-2 gap-x-4 gap-y-1">
             {['cesme','alacati','ilica','urla','gulbahce','karaburun','seferihisar','guzelbahce'].map((slug) => {
               const name = {cesme:'Çeşme',alacati:'Alaçatı',ilica:'Ilıca',urla:'Urla',gulbahce:'Gülbahçe',karaburun:'Karaburun',seferihisar:'Seferihisar',guzelbahce:'Güzelbahçe'}[slug];
-              return <li><a class="tap inline-flex items-center text-ink-3 hover:text-crane-deep" href={`/${slug}-vinc-kiralama`}>{name}</a></li>;
+              return <li><a class="tap inline-flex items-center text-ink-3 hover:text-sea" href={`/${slug}-vinc-kiralama`}>{name}</a></li>;
             })}
           </ul>
         </nav>
       </div>
       <div class="container-x flex flex-wrap items-center justify-between gap-2 border-t border-line py-4 text-xs text-ink-3">
         <span>© {year} {company.name}. Tüm hakları saklıdır.</span>
-        <span class="flex gap-4"><a class="hover:text-crane-deep" href="/sss">SSS</a><a class="hover:text-crane-deep" href="/iletisim">İletişim</a></span>
+        <span class="flex gap-4"><a class="hover:text-sea" href="/sss">SSS</a><a class="hover:text-sea" href="/iletisim">İletişim</a></span>
       </div>
     </footer>
 
